@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>AGENDA CF • ACF.18.11#4</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tipografia Expressiva Android 16 (Plus Jakarta Sans + Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =====================================================================
+           MATERIAL 3 EXPRESSIVE (ANDROID 16) - TOKENS DINÂMICOS POR PERFIL
+           ===================================================================== */
+        :root {
+            --bg-app: #F5F8F7;
+            --surface-low: #ECF2F0;
+            --surface-mid: #E2EAE7;
+            --surface-high: #D7E2DE;
+            --on-surface: #131C1A;
+            --on-surface-var: #4B5753;
+            --outline-var: #C3CECA;
+
+            /* Paleta Dinâmica Ativa (Padrão: Verde Sálvia) */
+            --primary: #006A60;
+            --on-primary: #FFFFFF;
+            --primary-container: #74F8E5;
+            --on-primary-container: #00201C;
+            --secondary-container: #CCE8E2;
+            --on-secondary-container: #05201C;
+            --tertiary-container: #CCE5FF;
+            --on-tertiary-container: #001E31;
+        }
+
+        html.dark {
+            --bg-app: #0E1413;
+            --surface-low: #161D1B;
+            --surface-mid: #1D2523;
+            --surface-high: #262F2D;
+            --on-surface: #E1E7E4;
+            --on-surface-var: #A4B0AC;
+            --outline-var: #38423F;
+        }
+
+        /* =====================================================================
+           ACESSIBILIDADE: ESCALA DE FONTE & ADAPTAÇÃO DE LAYOUT (SEM SOBREPOSIÇÃO)
+           ===================================================================== */
+        html {
+            font-size: 16px;
+            transition: font-size 0.2s ease;
+        }
+        html.font-large { font-size: 18.88px; }   /* 118% */
+        html.font-xlarge { font-size: 21.6px; }   /* 135% */
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--on-surface);
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        /* Reorganiza grades e elementos apertados quando a fonte está Grande ou Extra Grande */
+        html.font-large .adaptive-grid-2,
+        html.font-xlarge .adaptive-grid-2 {
+            grid-template-columns: 1fr !important;
+        }
+
+        html.font-xlarge .adaptive-grid-3 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+
+        html.font-large .adaptive-stack,
+        html.font-xlarge .adaptive-stack {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+
+        html.font-large .adaptive-chip,
+        html.font-xlarge .adaptive-chip {
+            height: auto !important;
+            min-height: 2.85rem;
+            padding-top: 0.6rem;
+            padding-bottom: 0.6rem;
+            line-height: 1.25;
+        }
+
+        html.font-large .adaptive-card,
+        html.font-xlarge .adaptive-card {
+            min-height: auto !important;
+            padding: 1.15rem !important;
+        }
+
+        .font-display { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+
+        /* Classes Utilitárias Material 3 */
+        .m3-surface-low { background-color: var(--surface-low); }
+        .m3-surface { background-color: var(--surface-mid); }
+        .m3-surface-high { background-color: var(--surface-high); }
+        .m3-primary { background-color: var(--primary); color: var(--on-primary); }
+        .m3-primary-text { color: var(--primary); }
+        .m3-primary-container { background-color: var(--primary-container); color: var(--on-primary-container); }
+        .m3-secondary-container { background-color: var(--secondary-container); color: var(--on-secondary-container); }
+        .m3-tertiary-container { background-color: var(--tertiary-container); color: var(--on-tertiary-container); }
+        .m3-text-var { color: var(--on-surface-var); }
+        .m3-border { border-color: var(--outline-var); }
+
+        /* Micro-interações */
+        .spring-btn {
+            transition: transform 0.16s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease, opacity 0.2s ease;
+        }
+        .spring-btn:active { transform: scale(0.95); }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-view { animation: fadeSlideUp 0.24s cubic-bezier(0.2, 0, 0, 1) forwards; }
+
+        @keyframes sheetUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-sheet { animation: sheetUp 0.26s cubic-bezier(0.05, 0.7, 0.1, 1) forwards; }
+
+        .pb-nav-safe { padding-bottom: calc(7rem + env(safe-area-inset-bottom)); }
+        .nav-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="max-w-md mx-auto min-h-screen flex flex-col relative">
+
+        <!-- ================= CABEÇALHO LIMPO ================= -->
+        <header class="sticky top-0 z-30 px-5 pt-4 pb-3 backdrop-blur-xl" style="background-color: color-mix(in srgb, var(--bg-app) 88%, transparent);">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-9 h-9 rounded-[14px] m3-primary-container flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/>
+                        </svg>
+                    </div>
+                    <h1 class="font-display text-lg font-extrabold tracking-tight truncate">AGENDA CF</h1>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <button type="button" id="btn-toggle-theme" class="w-10 h-10 rounded-full m3-surface-low flex items-center justify-center spring-btn m3-text-var" title="Alternar Tema">
+                        <svg id="icon-moon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                        <svg id="icon-sun" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    </button>
+
+                    <button type="button" id="btn-open-settings" class="w-10 h-10 rounded-full m3-surface-low flex items-center justify-center spring-btn m3-text-var" title="Configurações">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Segmented Button para 2 Perfis -->
+            <div class="mt-3 p-1 rounded-full m3-surface-low grid grid-cols-2 gap-1">
+                <button type="button" id="seg-profile-0" class="min-h-[2.5rem] py-1.5 px-3 rounded-full m3-secondary-container flex items-center justify-center gap-2 text-sm font-bold spring-btn">
+                    <span id="dot-profile-0" class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: #006A60;"></span>
+                    <span id="label-profile-0" class="truncate">Pessoa 1</span>
+                </button>
+
+                <button type="button" id="seg-profile-1" class="min-h-[2.5rem] py-1.5 px-3 rounded-full m3-text-var flex items-center justify-center gap-2 text-sm font-semibold spring-btn">
+                    <span id="dot-profile-1" class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: #B81D65;"></span>
+                    <span id="label-profile-1" class="truncate">Pessoa 2</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ================= ÁREA PRINCIPAL ================= -->
+        <main class="flex-1 px-5 pt-2 pb-nav-safe space-y-5">
+
+            <!-- ==================== ABA 1: INÍCIO ==================== -->
+            <section id="view-home" class="space-y-4 animate-view">
+                
+                <!-- Card Hero: Próxima Dose -->
+                <div class="rounded-[28px] m3-primary-container p-6 relative overflow-hidden">
+                    <div class="flex items-start justify-between gap-3 adaptive-stack">
+                        <div class="min-w-0">
+                            <span class="text-xs font-bold uppercase tracking-wider opacity-75">Próxima dose</span>
+                            <h2 id="home-countdown" class="font-display text-3xl font-extrabold tracking-tight mt-1 leading-tight">Sem registros</h2>
+                            <p id="home-next-date" class="text-sm font-semibold opacity-85 mt-1">Toque no + para anotar</p>
+                        </div>
+
+                        <button type="button" id="btn-hero-add" class="w-12 h-12 rounded-[18px] m3-primary flex items-center justify-center shrink-0 spring-btn shadow-xs" title="Registrar Dose">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Pílula Única de Sugestão de Rodízio -->
+                    <div id="home-rotation-pill" class="hidden mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-black/10 dark:bg-white/10 max-w-full">
+                        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                        <span id="home-rotation-text">Sugestão: Abdômen Esq.</span>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-current/20">
+                        <h3 id="home-month-title" class="text-xs font-bold capitalize">Este mês</h3>
+                        <div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold">
+                            <p id="home-month-doses"></p>
+                            <p id="home-month-weight"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2 Cards Compactos (Adapta para 1 coluna quando fonte aumenta) -->
+                <div class="grid grid-cols-2 gap-3.5 adaptive-grid-2">
+                    <div class="rounded-[24px] m3-surface-low p-4 flex flex-col justify-between min-h-[104px] adaptive-card">
+                        <span class="text-xs font-semibold m3-text-var">Dose atual</span>
+                        <div id="home-current-dose" class="font-display text-2xl font-extrabold tracking-tight mt-2">—</div>
+                    </div>
+
+                    <div id="card-goto-weight" role="button" tabindex="0" class="rounded-[24px] m3-surface-low p-4 flex flex-col justify-between min-h-[104px] adaptive-card cursor-pointer spring-btn">
+                        <span class="text-xs font-semibold m3-text-var">Variação</span>
+                        <div id="home-weight-diff" class="font-display text-2xl font-extrabold tracking-tight mt-2">-- kg</div>
+                    </div>
+                </div>
+
+                <!-- Estado Vazio Discreto -->
+                <div id="home-empty-card" class="hidden rounded-[24px] m3-surface-low p-6 text-center space-y-3">
+                    <p class="text-sm font-medium m3-text-var">Nenhum registro ainda para <strong class="active-profile-label">Pessoa 1</strong>.</p>
+                    <div class="flex flex-wrap gap-2.5 justify-center pt-1">
+                        <button type="button" id="btn-empty-add" class="min-h-[2.6rem] px-5 py-2 rounded-full m3-primary font-display text-xs font-bold spring-btn">
+                            + Nova Dose
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista Limpa: 3 Registros Mais Recentes -->
+                <div id="home-recent-wrapper" class="space-y-2.5">
+                    <div class="flex items-center justify-between gap-2 px-1">
+                        <h3 class="font-display text-xs font-bold uppercase tracking-wider m3-text-var">Recentes</h3>
+                        <button type="button" id="btn-see-calendar" class="text-xs font-bold m3-primary-text">Ver agenda</button>
+                    </div>
+                    <div id="home-recent-list" class="space-y-2"></div>
+                </div>
+            </section>
+
+            <!-- ==================== ABA 2: AGENDA ==================== -->
+            <section id="view-calendar" class="hidden space-y-4 animate-view">
+                <div class="rounded-[28px] m3-surface-low p-5">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <button type="button" id="btn-prev-month" class="w-10 h-10 rounded-full m3-surface flex items-center justify-center shrink-0 spring-btn" title="Mês anterior">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                        <button type="button" id="btn-today-month" class="font-display text-base font-extrabold capitalize px-3 py-1 rounded-full hover:opacity-80 text-center">
+                            <span id="cal-month-title">Novembro 2026</span>
+                        </button>
+                        <button type="button" id="btn-next-month" class="w-10 h-10 rounded-full m3-surface flex items-center justify-center shrink-0 spring-btn" title="Próximo mês">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-7 text-center text-[11px] font-bold m3-text-var mb-2">
+                        <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+                    </div>
+
+                    <div id="cal-days-grid" class="grid grid-cols-7 gap-1.5"></div>
+                </div>
+
+                <!-- Detalhes do Dia Selecionado -->
+                <div class="rounded-[24px] m3-surface-low p-5 space-y-3">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <h3 id="cal-selected-label" class="font-display text-sm font-extrabold">--/--/----</h3>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="btn-cal-add-dose" class="min-h-[2.1rem] px-3 py-1 rounded-full m3-primary-container font-bold text-xs flex items-center gap-1 spring-btn">
+                                <span>+ Dose</span>
+                            </button>
+                            <button type="button" id="btn-cal-add-weight" class="min-h-[2.1rem] px-3 py-1 rounded-full m3-tertiary-container font-bold text-xs flex items-center gap-1 spring-btn">
+                                <span>+ Peso</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="cal-day-records" class="space-y-2"></div>
+                </div>
+            </section>
+
+            <!-- ==================== ABA 3: PESO ==================== -->
+            <section id="view-weight" class="hidden space-y-4 animate-view">
+                
+                <!-- Card Principal + Gráfico SVG -->
+                <div class="rounded-[28px] m3-surface-low p-5 space-y-4">
+                    <div class="flex items-start justify-between gap-3 adaptive-stack">
+                        <div>
+                            <span class="text-xs font-semibold m3-text-var">Peso atual</span>
+                            <div class="flex flex-wrap items-baseline gap-2.5 mt-0.5">
+                                <span id="weight-current-val" class="font-display text-3xl font-extrabold tracking-tight">-- kg</span>
+                                <span id="weight-total-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold m3-surface">-- kg</span>
+                            </div>
+                        </div>
+
+                        <button type="button" id="btn-weight-open-modal" class="min-h-[2.6rem] px-4 py-2 rounded-full m3-primary font-display text-xs font-bold flex items-center gap-1.5 shrink-0 spring-btn">
+                            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>Registrar peso</span>
+                        </button>
+                    </div>
+
+                    <!-- Gráfico SVG Limpo -->
+                    <div id="weight-chart-box" class="pt-1"></div>
+                </div>
+
+                <!-- Histórico Completo de Pesagens -->
+                <div class="space-y-2.5">
+                    <h3 class="font-display text-xs font-bold uppercase tracking-wider m3-text-var px-1">Histórico</h3>
+                    <div id="weight-list" class="space-y-2"></div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ================= BARRA DE NAVEGAÇÃO INFERIOR (3 ABAS) + FAB ================= -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-30 m3-surface-low border-t m3-border nav-safe">
+            <div class="flex items-center justify-between min-h-[5rem] py-1.5 px-4">
+                <div class="flex-1 grid grid-cols-3 gap-1 pr-3">
+                    <button type="button" data-tab="home" class="nav-tab-btn flex flex-col items-center justify-center gap-1 py-1">
+                        <div class="nav-pill w-16 h-8 rounded-full m3-secondary-container flex items-center justify-center transition-all">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        </div>
+                        <span class="nav-text text-xs font-bold leading-none">Início</span>
+                    </button>
+
+                    <button type="button" data-tab="calendar" class="nav-tab-btn flex flex-col items-center justify-center gap-1 py-1">
+                        <div class="nav-pill w-16 h-8 rounded-full flex items-center justify-center transition-all m3-text-var">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                        </div>
+                        <span class="nav-text text-xs font-medium m3-text-var leading-none">Agenda</span>
+                    </button>
+
+                    <button type="button" data-tab="weight" class="nav-tab-btn flex flex-col items-center justify-center gap-1 py-1">
+                        <div class="nav-pill w-16 h-8 rounded-full flex items-center justify-center transition-all m3-text-var">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                        </div>
+                        <span class="nav-text text-xs font-medium m3-text-var leading-none">Peso</span>
+                    </button>
+                </div>
+
+                <!-- FAB Expressivo (+) -->
+                <button type="button" id="fab-quick-add" class="w-14 h-14 rounded-[20px] m3-primary flex items-center justify-center shadow-sm spring-btn shrink-0" title="Novo Registro">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            </div>
+        </nav>
+
+    </div>
+
+    <!-- ================= BOTTOM SHEET: REGISTRO RÁPIDO (DOSE / PESO) ================= -->
+    <div id="modal-entry" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end sm:items-center justify-center">
+        <div class="w-full max-w-md rounded-t-[32px] sm:rounded-[32px] m3-surface-low p-6 pt-3 shadow-2xl animate-sheet max-h-[92vh] overflow-y-auto">
+            <div class="w-9 h-1 rounded-full mx-auto mb-4 opacity-30" style="background-color: var(--on-surface-var);"></div>
+
+            <div class="flex items-center justify-between gap-2 mb-4">
+                <div class="p-1 rounded-full m3-surface grid grid-cols-2 gap-1 flex-1">
+                    <button type="button" id="sheet-mode-dose" class="min-h-[2.35rem] py-1 px-2 rounded-full m3-secondary-container text-xs font-bold transition-all">Nova Dose</button>
+                    <button type="button" id="sheet-mode-weight" class="min-h-[2.35rem] py-1 px-2 rounded-full m3-text-var text-xs font-semibold transition-all">Novo Peso</button>
+                </div>
+
+                <button type="button" data-close-modal="modal-entry" class="w-9 h-9 rounded-full m3-surface flex items-center justify-center spring-btn shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <!-- FORMULÁRIO 1: NOVA DOSE -->
+            <form id="form-dose" class="space-y-4">
+                <div class="rounded-[18px] m3-surface px-4 py-2.5">
+                    <label for="input-dose-date" class="block text-[10px] font-bold uppercase tracking-wider m3-text-var">Data da Aplicação</label>
+                    <input type="date" id="input-dose-date" required class="w-full bg-transparent text-sm font-bold focus:outline-none mt-0.5">
+                </div>
+
+                <div>
+                    <span class="block text-xs font-bold m3-text-var mb-2 px-1">Dose aplicada</span>
+                    <p class="text-xs m3-text-var mb-2 px-1">µL (Micro Litros) · mL (Mililitros)</p>
+                    <div class="grid grid-cols-3 gap-2 adaptive-grid-3" id="dose-chips-group"></div>
+                    <input type="hidden" id="input-dose-val" value="">
+                </div>
+
+                <div>
+                    <span class="block text-xs font-bold m3-text-var mb-2 px-1">Local de Aplicação</span>
+                    <div class="grid grid-cols-2 gap-2 adaptive-grid-2" id="site-chips-group">
+                        <button type="button" data-site-val="Abdômen Esq." class="site-chip adaptive-chip h-10 rounded-full border m3-border text-xs font-bold spring-btn">Abdômen Esq.</button>
+                        <button type="button" data-site-val="Abdômen Dir." class="site-chip adaptive-chip h-10 rounded-full border m3-border text-xs font-bold spring-btn">Abdômen Dir.</button>
+                        <button type="button" data-site-val="Coxa Esq." class="site-chip adaptive-chip h-10 rounded-full border m3-border text-xs font-bold spring-btn">Coxa Esq.</button>
+                        <button type="button" data-site-val="Coxa Dir." class="site-chip adaptive-chip h-10 rounded-full border m3-border text-xs font-bold spring-btn">Coxa Dir.</button>
+                        <button type="button" data-site-val="Braço Esq." class="site-chip adaptive-chip h-10 rounded-full border m3-border text-xs font-bold spring-btn">Braço Esq.</button>
+                        <button type="button" data-site-val="Braço Dir." class="site-chip adaptive-chip h-10 rounded-full border m3-border text-xs font-bold spring-btn">Braço Dir.</button>
+                    </div>
+                    <input type="hidden" id="input-dose-site" value="Abdômen Esq.">
+                </div>
+
+                <div class="rounded-[16px] m3-surface px-4 py-2.5">
+                    <label for="select-dose-brand" class="block text-[10px] font-bold uppercase m3-text-var">Marca</label>
+                    <select id="select-dose-brand" class="w-full m3-surface text-sm font-semibold mt-0.5"></select>
+                    <input type="text" id="input-dose-brand" aria-label="Nome de outra marca" placeholder="Digite o nome da marca"
+                        class="hidden w-full bg-transparent text-sm font-semibold mt-2">
+                </div>
+
+
+                <!-- Seção Expansível: + Mais detalhes -->
+                <div>
+                    <button type="button" id="btn-toggle-extra" class="text-xs font-bold m3-primary-text flex items-center gap-1 py-1 px-1">
+                        <span id="extra-toggle-symbol">+</span>
+                        <span>Mais detalhes</span>
+                    </button>
+
+                    <div id="dose-extra-box" class="hidden space-y-2.5 pt-2.5">
+                        <div class="rounded-[16px] m3-surface px-4 py-2.5">
+                            <label for="input-dose-qty" class="block text-[10px] font-bold uppercase m3-text-var">Quantidade / Embalagem (opcional)</label>
+                            <input type="text" id="input-dose-qty" placeholder="Ex: 1 caneta" class="w-full bg-transparent text-sm font-semibold focus:outline-none mt-0.5">
+                        </div>
+
+                        <div class="rounded-[16px] m3-surface px-4 py-2.5">
+                            <label for="input-dose-notes" class="block text-[10px] font-bold uppercase m3-text-var">Observações</label>
+                            <input type="text" id="input-dose-notes" placeholder="Opcional..." class="w-full bg-transparent text-sm focus:outline-none mt-0.5">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full min-h-[3rem] py-3 rounded-full m3-primary font-display font-bold text-sm flex items-center justify-center gap-2 spring-btn">
+                    <span>Salvar Dose</span>
+                </button>
+            </form>
+
+            <!-- FORMULÁRIO 2: NOVO PESO -->
+            <form id="form-weight" class="hidden space-y-4">
+                <div class="rounded-[18px] m3-surface px-4 py-2.5">
+                    <label for="input-weight-date" class="block text-[10px] font-bold uppercase tracking-wider m3-text-var">Data da Pesagem</label>
+                    <input type="date" id="input-weight-date" required class="w-full bg-transparent text-sm font-bold focus:outline-none mt-0.5">
+                </div>
+
+                <div class="rounded-[18px] m3-surface px-4 py-3">
+                    <label for="input-weight-kg" class="block text-[10px] font-bold uppercase tracking-wider m3-text-var">Peso (kg)</label>
+                    <input type="text" inputmode="decimal" id="input-weight-kg" required placeholder="Ex: 84,5" class="w-full bg-transparent font-display text-2xl font-extrabold focus:outline-none mt-1">
+                </div>
+
+                <button type="submit" class="w-full min-h-[3rem] py-3 rounded-full m3-primary font-display font-bold text-sm flex items-center justify-center gap-2 spring-btn">
+                    <span>Salvar Peso</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= BOTTOM SHEET: CONFIGURAÇÕES (ACF.18.11#4) ================= -->
+    <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end sm:items-center justify-center">
+        <div class="w-full max-w-md rounded-t-[32px] sm:rounded-[32px] m3-surface-low p-6 pt-3 shadow-2xl animate-sheet space-y-5 max-h-[90vh] overflow-y-auto">
+            <div class="w-9 h-1 rounded-full mx-auto opacity-30" style="background-color: var(--on-surface-var);"></div>
+
+            <div class="flex items-center justify-between gap-2">
+                <div>
+                    <h3 class="font-display text-lg font-extrabold leading-tight">Configurações</h3>
+                    <span class="text-[11px] font-bold m3-primary-text">AGENDA CF • ACF.18.11#4</span>
+                </div>
+                <button type="button" data-close-modal="modal-settings" class="w-9 h-9 rounded-full m3-surface flex items-center justify-center shrink-0 spring-btn">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <!-- 1. Acessibilidade: Tamanho da Fonte -->
+            <div class="space-y-2">
+                <div class="px-1">
+                    <span class="block text-xs font-bold uppercase tracking-wider m3-text-var">Tamanho da Fonte</span>
+                    <span class="block text-[11px] m3-text-var">Ajusta textos e reorganiza o layout para leitura confortável</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 adaptive-grid-2" id="font-size-options">
+                    <button type="button" data-font-scale="normal" class="font-scale-btn adaptive-chip rounded-[18px] border m3-border px-3 py-2.5 text-center spring-btn">
+                        <span class="block text-xs font-extrabold">Normal</span>
+                        <span class="block text-[11px] opacity-75">100%</span>
+                    </button>
+                    <button type="button" data-font-scale="large" class="font-scale-btn adaptive-chip rounded-[18px] border m3-border px-3 py-2.5 text-center spring-btn">
+                        <span class="block text-sm font-extrabold">Grande</span>
+                        <span class="block text-[11px] opacity-75">118%</span>
+                    </button>
+                    <button type="button" data-font-scale="xlarge" class="font-scale-btn adaptive-chip rounded-[18px] border m3-border px-3 py-2.5 text-center spring-btn">
+                        <span class="block text-base font-extrabold">Extra Grande</span>
+                        <span class="block text-[11px] opacity-75">135%</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Perfil 1: Nome + Tema/Cor -->
+            <div class="rounded-[24px] m3-surface p-4 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-extrabold uppercase tracking-wider m3-text-var">Perfil 1</span>
+                    <span id="badge-active-0" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold m3-secondary-container">Ativo</span>
+                </div>
+
+                <div class="flex gap-2 adaptive-stack">
+                    <div class="flex-1 w-full rounded-[16px] m3-surface-low px-3.5 py-2">
+                        <label for="settings-name-0" class="block text-[10px] font-bold uppercase m3-text-var">Nome do Usuário 1</label>
+                        <input type="text" id="settings-name-0" maxlength="22" placeholder="Ex: Ana" class="w-full bg-transparent text-sm font-bold focus:outline-none mt-0.5">
+                    </div>
+                    <button type="button" data-save-profile-name="0" class="min-h-[2.85rem] px-4 rounded-[16px] m3-primary font-display text-xs font-bold shrink-0 spring-btn">
+                        Salvar
+                    </button>
+                </div>
+
+                <div class="space-y-1.5">
+                    <span class="block text-[11px] font-bold m3-text-var">Cor do Tema (Perfil 1)</span>
+                    <div class="flex flex-wrap items-center gap-2.5" id="swatches-profile-0"></div>
+                </div>
+            </div>
+
+            <!-- 3. Perfil 2: Nome + Tema/Cor -->
+            <div class="rounded-[24px] m3-surface p-4 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-extrabold uppercase tracking-wider m3-text-var">Perfil 2</span>
+                    <span id="badge-active-1" class="hidden px-2.5 py-0.5 rounded-full text-[11px] font-bold m3-secondary-container">Ativo</span>
+                </div>
+
+                <div class="flex gap-2 adaptive-stack">
+                    <div class="flex-1 w-full rounded-[16px] m3-surface-low px-3.5 py-2">
+                        <label for="settings-name-1" class="block text-[10px] font-bold uppercase m3-text-var">Nome do Usuário 2</label>
+                        <input type="text" id="settings-name-1" maxlength="22" placeholder="Ex: Carlos" class="w-full bg-transparent text-sm font-bold focus:outline-none mt-0.5">
+                    </div>
+                    <button type="button" data-save-profile-name="1" class="min-h-[2.85rem] px-4 rounded-[16px] m3-primary font-display text-xs font-bold shrink-0 spring-btn">
+                        Salvar
+                    </button>
+                </div>
+
+                <div class="space-y-1.5">
+                    <span class="block text-[11px] font-bold m3-text-var">Cor do Tema (Perfil 2)</span>
+                    <div class="flex flex-wrap items-center gap-2.5" id="swatches-profile-1"></div>
+                </div>
+            </div>
+
+            <section class="rounded-[24px] m3-surface p-4 space-y-3" aria-labelledby="settings-dose-title">
+                <h4 id="settings-dose-title" class="text-xs font-extrabold uppercase tracking-wider m3-text-var">Aplicações</h4>
+                <p id="settings-dose-profile" class="text-xs font-bold m3-text-var"></p>
+
+                <form id="settings-interval-form" class="space-y-1.5">
+                    <label for="settings-interval" class="block text-xs font-bold">Intervalo entre aplicações (dias)</label>
+                    <div class="flex gap-2 adaptive-stack">
+                        <input id="settings-interval" type="number" min="1" max="3650" step="1" required
+                            class="min-w-0 w-full rounded-[16px] m3-surface-low px-3 py-2 text-sm font-bold">
+                        <button class="rounded-[16px] m3-primary px-4 py-2 text-xs font-bold shrink-0 whitespace-nowrap spring-btn">Salvar</button>
+                    </div>
+                    <p class="text-xs m3-text-var">Usado para calcular a data prevista no Início e na Agenda.</p>
+                </form>
+
+                <form id="settings-brand-form" class="space-y-1.5">
+                    <label for="settings-brand" class="block text-xs font-bold">Cadastrar marca</label>
+                    <div class="flex gap-2 adaptive-stack">
+                        <input id="settings-brand" maxlength="60" required placeholder="Nome da marca"
+                            class="min-w-0 w-full rounded-[16px] m3-surface-low px-3 py-2 text-sm">
+                        <button class="rounded-[16px] m3-primary px-4 py-2 text-xs font-bold shrink-0 whitespace-nowrap spring-btn">Adicionar</button>
+                    </div>
+                    <ul id="settings-brands-list" class="flex flex-wrap gap-2"></ul>
+                </form>
+
+                <form id="settings-custom-dose-form" class="space-y-1.5">
+                    <label for="settings-custom-dose" class="block text-xs font-bold">Adicionar dose personalizada</label>
+                    <div class="flex gap-2 adaptive-stack">
+                        <input id="settings-custom-dose" inputmode="decimal" maxlength="20" required placeholder="Valor"
+                            class="min-w-0 w-full rounded-[16px] m3-surface-low px-3 py-2 text-sm">
+                        <button class="rounded-[16px] m3-primary px-4 py-2 text-xs font-bold shrink-0 whitespace-nowrap spring-btn">Adicionar</button>
+                    </div>
+                    <label for="settings-custom-dose-unit" class="block text-xs font-bold">Unidade</label>
+                    <select id="settings-custom-dose-unit" class="w-full rounded-[16px] m3-surface-low px-3 py-2 text-sm">
+                        <option value="µL">µL (Micro Litros)</option>
+                        <option value="mL">mL (Mililitros)</option>
+                    </select>
+                    <ul id="settings-custom-doses-list" class="flex flex-wrap gap-2"></ul>
+                </form>
+            </section>
+
+            <details id="settings-report" class="rounded-[24px] m3-surface p-4">
+                <summary class="cursor-pointer text-sm font-extrabold">📋 Relatório em texto</summary>
+                <div class="mt-3 space-y-3">
+                    <p id="report-profile" class="text-xs font-bold m3-text-var"></p>
+                    <div class="space-y-1.5">
+                        <label for="report-period" class="block text-sm font-bold">Período</label>
+                        <select id="report-period" class="w-full rounded-[16px] m3-surface-low px-3 py-2.5 text-sm">
+                            <option value="30">Últimos 30 dias</option>
+                            <option value="60">Últimos 60 dias</option>
+                            <option value="custom">Período personalizado</option>
+                        </select>
+                    </div>
+                    <div id="report-custom-dates" class="hidden grid grid-cols-2 gap-2 adaptive-grid-2">
+                        <div class="min-w-0 space-y-1">
+                            <label for="report-start" class="block text-xs font-bold">Data inicial</label>
+                            <input id="report-start" type="date" class="w-full min-w-0 rounded-[16px] m3-surface-low px-2 py-2 text-sm">
+                        </div>
+                        <div class="min-w-0 space-y-1">
+                            <label for="report-end" class="block text-xs font-bold">Data final</label>
+                            <input id="report-end" type="date" class="w-full min-w-0 rounded-[16px] m3-surface-low px-2 py-2 text-sm">
+                        </div>
+                    </div>
+                    <p id="report-error" class="hidden text-xs font-bold m3-text-var" role="status"></p>
+                    <div class="space-y-1.5">
+                        <label for="report-text" class="block text-sm font-bold">Prévia</label>
+                        <textarea id="report-text" readonly rows="10" spellcheck="false"
+                            class="w-full resize-y rounded-[16px] m3-surface-low p-3 text-sm leading-relaxed"></textarea>
+                    </div>
+                    <button type="button" id="btn-copy-report"
+                        class="w-full rounded-[16px] m3-primary px-4 py-2.5 text-sm font-bold spring-btn disabled:opacity-50">
+                        Copiar relatório
+                    </button>
+                    <p id="report-copy-status" class="text-xs font-bold m3-text-var" role="status"></p>
+                </div>
+            </details>
+
+            <section class="space-y-2.5 pt-1" aria-labelledby="settings-data-title">
+                <h4 id="settings-data-title" class="text-xs font-bold uppercase tracking-wider m3-text-var px-1">Dados e sincronização</h4>
+                <div class="rounded-[18px] m3-surface p-3 space-y-2">
+                    <p id="cloud-status" class="text-sm font-bold" role="status">Preparando sincronização…</p>
+                    <button type="button" id="btn-retry-cloud" class="hidden rounded-full m3-secondary-container px-3 py-2 text-xs font-bold spring-btn">
+                        Tentar novamente
+                    </button>
+                </div>
+
+                <button type="button" id="btn-reset-all" class="w-full min-h-[2.7rem] px-4 py-2 rounded-full border border-rose-500/40 text-rose-500 font-bold text-xs flex items-center justify-center spring-btn">
+                    Apagar tudo
+                </button>
+            </section>
+
+            <details class="rounded-[20px] m3-surface p-4">
+                <summary class="cursor-pointer text-sm font-bold">Atualização (não mexa aqui)</summary>
+                <div class="mt-3 space-y-2 text-xs m3-text-var">
+                    <p>18/11 · Agora dá pra vcs salvar marcas e doses e mudar o intervalo da próxima aplicação.</p>
+                    <p>Se acharem algum bug, me avisa kkkkk</p>
+                    <p>Deixando anotado aqui pra eu lembrar depois: adicionar uns modelos personalizados.</p>
+                    <p>18/11 · Coloquei um relatório pra copiar em texto nas configurações.</p>
+                    <p>18/11 · Agora os registros também são salvos na nuvem, sem pedir e-mail ou senha.</p>
+                </div>
+            </details>
+
+            <!-- Rodapé da versão -->
+            <div class="text-center pt-1 pb-1">
+                <p class="text-[11px] font-bold m3-text-var">AGENDA CF • Versão ACF.18.11#4</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: CONFIRMAÇÃO ================= -->
+    <div id="modal-confirm" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="w-full max-w-xs rounded-[28px] m3-surface-low p-6 shadow-2xl text-center space-y-4">
+            <div>
+                <h3 id="confirm-title" class="font-display text-base font-extrabold">Confirmar?</h3>
+                <p id="confirm-msg" class="text-xs m3-text-var mt-1">Essa ação não pode ser desfeita.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 pt-1">
+                <button type="button" data-close-modal="modal-confirm" class="min-h-[2.5rem] px-4 rounded-full text-xs font-bold m3-surface">Cancelar</button>
+                <button type="button" id="btn-confirm-yes" class="min-h-[2.5rem] px-5 rounded-full text-xs font-bold bg-rose-600 text-white spring-btn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snackbar -->
+    <div id="snackbar" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-250 transform translate-y-2 w-max max-w-[90%]">
+        <div class="px-4 py-3 rounded-[16px] shadow-lg text-xs font-semibold" style="background-color: var(--on-surface); color: var(--bg-app);">
+            <span id="snackbar-text">Salvo!</span>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // =====================================================================
+            // CONSTANTES, PALETAS DE CORES & ESTADO ESTRUTURADO (PRONTO P/ FIREBASE)
+            // =====================================================================
+            const APP_VERSION = 'ACF.18.11#4';
+            const STORAGE_KEY = 'agenda_cf_state_v1';
+            const LEGACY_KEY = 'mounjaro_tracker_v1';
+            const THEME_KEY = 'agenda_cf_theme';
+
+            // 6 Paletas Material 3 Expressive pré-prontas (Modo Claro e Escuro)
+            const THEME_PRESETS = {
+                sage: {
+                    name: 'Verde Sálvia',
+                    swatch: '#006A60',
+                    light: {
+                        primary: '#006A60',
+                        onPrimary: '#FFFFFF',
+                        primaryContainer: '#74F8E5',
+                        onPrimaryContainer: '#00201C',
+                        secondaryContainer: '#CCE8E2',
+                        onSecondaryContainer: '#05201C'
+                    },
+                    dark: {
+                        primary: '#53DBC9',
+                        onPrimary: '#003731',
+                        primaryContainer: '#005048',
+                        onPrimaryContainer: '#74F8E5',
+                        secondaryContainer: '#334B47',
+                        onSecondaryContainer: '#CCE8E2'
+                    }
+                },
+                rose: {
+                    name: 'Rosa Quartzo',
+                    swatch: '#B81D65',
+                    light: {
+                        primary: '#B81D65',
+                        onPrimary: '#FFFFFF',
+                        primaryContainer: '#FFD9E3',
+                        onPrimaryContainer: '#3E001E',
+                        secondaryContainer: '#F7D8E2',
+                        onSecondaryContainer: '#2B151D'
+                    },
+                    dark: {
+                        primary: '#FFB0CA',
+                        onPrimary: '#650034',
+                        primaryContainer: '#8E004B',
+                        onPrimaryContainer: '#FFD9E3',
+                        secondaryContainer: '#5A3F48',
+                        onSecondaryContainer: '#F7D8E2'
+                    }
+                },
+                indigo: {
+                    name: 'Índigo',
+                    swatch: '#4355B9',
+                    light: {
+                        primary: '#4355B9',
+                        onPrimary: '#FFFFFF',
+                        primaryContainer: '#DEE0FF',
+                        onPrimaryContainer: '#00105C',
+                        secondaryContainer: '#E1E0F9',
+                        onSecondaryContainer: '#191A2C'
+                    },
+                    dark: {
+                        primary: '#BAC3FF',
+                        onPrimary: '#08218A',
+                        primaryContainer: '#293CA0',
+                        onPrimaryContainer: '#DEE0FF',
+                        secondaryContainer: '#434559',
+                        onSecondaryContainer: '#E1E0F9'
+                    }
+                },
+                ocean: {
+                    name: 'Azul Oceano',
+                    swatch: '#006495',
+                    light: {
+                        primary: '#006495',
+                        onPrimary: '#FFFFFF',
+                        primaryContainer: '#CBE6FF',
+                        onPrimaryContainer: '#001E30',
+                        secondaryContainer: '#D2E4F5',
+                        onSecondaryContainer: '#0B1D29'
+                    },
+                    dark: {
+                        primary: '#8ECDFF',
+                        onPrimary: '#003450',
+                        primaryContainer: '#004B71',
+                        onPrimaryContainer: '#CBE6FF',
+                        secondaryContainer: '#374957',
+                        onSecondaryContainer: '#D2E4F5'
+                    }
+                },
+                coral: {
+                    name: 'Terracota',
+                    swatch: '#A8381E',
+                    light: {
+                        primary: '#A8381E',
+                        onPrimary: '#FFFFFF',
+                        primaryContainer: '#FFDBD2',
+                        onPrimaryContainer: '#3D0700',
+                        secondaryContainer: '#F6DDD6',
+                        onSecondaryContainer: '#2C1510'
+                    },
+                    dark: {
+                        primary: '#FFB4A2',
+                        onPrimary: '#621200',
+                        primaryContainer: '#862209',
+                        onPrimaryContainer: '#FFDBD2',
+                        secondaryContainer: '#5C4039',
+                        onSecondaryContainer: '#F6DDD6'
+                    }
+                },
+                lavender: {
+                    name: 'Lavanda',
+                    swatch: '#6F43C0',
+                    light: {
+                        primary: '#6F43C0',
+                        onPrimary: '#FFFFFF',
+                        primaryContainer: '#EBDDFF',
+                        onPrimaryContainer: '#25005A',
+                        secondaryContainer: '#E7DEF8',
+                        onSecondaryContainer: '#1D192B'
+                    },
+                    dark: {
+                        primary: '#D3BBFF',
+                        onPrimary: '#3E008E',
+                        primaryContainer: '#5629A6',
+                        onPrimaryContainer: '#EBDDFF',
+                        secondaryContainer: '#4A4458',
+                        onSecondaryContainer: '#E7DEF8'
+                    }
+                }
+            };
+
+            const ROTATION_SITES = [
+                'Abdômen Esq.',
+                'Abdômen Dir.',
+                'Coxa Esq.',
+                'Coxa Dir.',
+                'Braço Esq.',
+                'Braço Dir.'
+            ];
+
+            const PRESET_DOSES = ['100 µL', '250 µL', '500 µL', '0.1 mL', '0.25 mL', '0.5 mL'];
+            const DEFAULT_APPLICATION_SETTINGS = { intervalDays: 7, brands: [], customDoses: [] };
+
+            const DEFAULT_STATE = {
+                version: APP_VERSION,
+                activeProfile: 0,
+                fontScale: 'normal', // 'normal' | 'large' | 'xlarge'
+                profiles: [
+                    { id: 'user_1', name: 'Pessoa 1', themeKey: 'sage', customHex: '#006A60', doses: [], weights: [], ...DEFAULT_APPLICATION_SETTINGS },
+                    { id: 'user_2', name: 'Pessoa 2', themeKey: 'rose', customHex: '#B81D65', doses: [], weights: [], ...DEFAULT_APPLICATION_SETTINGS }
+                ]
+            };
+
+            let pendingCloud = null;
+            let cloud = null;
+            let connectingCloud = false;
+            let writingCloud = false;
+            let appState = loadState();
+            let activeTab = 'home';
+            let calendarMonthDate = new Date();
+            let selectedDateISO = getTodayISO();
+            let pendingConfirmAction = null;
+
+            // =====================================================================
+            // PERSISTÊNCIA & MIGRAÇÃO SEGURA (LOCALSTORAGE -> FUTURO FIREBASE)
+            // =====================================================================
+            function loadState() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (parsed && Array.isArray(parsed.profiles) && parsed.profiles.length === 2) {
+                            if (['save', 'delete'].includes(parsed.pendingCloud)) {
+                                pendingCloud = { action: parsed.pendingCloud };
+                            }
+                            delete parsed.pendingCloud;
+                            return normalizeState(parsed);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Erro ao ler estado:', err);
+                }
+                return JSON.parse(JSON.stringify(DEFAULT_STATE));
+            }
+
+            function parseCustomDose(value, unit) {
+                const decimal = value.trim().replace(',', '.');
+                const amount = Number(decimal);
+                if (!/^\d+(?:\.\d+)?$/.test(decimal) || !Number.isFinite(amount) || amount <= 0) return null;
+                const [whole, fraction = ''] = decimal.split('.');
+                const digits = whole.replace(/^0+(?=\d)/, '');
+                const decimals = fraction.replace(/0+$/, '');
+                return `${digits}${decimals ? '.' + decimals : ''} ${unit}`;
+            }
+
+            function normalizeState(state) {
+                state.version = APP_VERSION;
+                if (![0, 1].includes(state.activeProfile)) state.activeProfile = 0;
+                if (!['normal', 'large', 'xlarge'].includes(state.fontScale)) state.fontScale = 'normal';
+
+                state.profiles = state.profiles.map((profile, index) => {
+                    const defaults = DEFAULT_STATE.profiles[index];
+                    const p = { ...defaults, ...profile };
+                    for (const key of ['id', 'name', 'themeKey', 'customHex']) {
+                        if (!p[key]) p[key] = defaults[key];
+                    }
+                    if (!Array.isArray(p.doses)) p.doses = [];
+                    if (!Array.isArray(p.weights)) p.weights = [];
+                    if (!Number.isInteger(p.intervalDays) || p.intervalDays < 1 || p.intervalDays > 3650) {
+                        p.intervalDays = DEFAULT_APPLICATION_SETTINGS.intervalDays;
+                    }
+                    const brands = Array.isArray(p.brands) ? p.brands : [];
+                    const names = brands.filter((value) => typeof value === 'string')
+                        .map((value) => value.trim()).filter(Boolean);
+                    p.brands = [...new Map(names.map((name) => [name.toLowerCase(), name])).values()];
+                    const custom = Array.isArray(p.customDoses) ? p.customDoses : [];
+                    p.customDoses = [...new Set(custom.filter((value) => typeof value === 'string')
+                        .map((value) => {
+                            const match = value.trim().match(/^([\d.,]+)\s*(mg|mL|[µμu]L)$/i);
+                            if (!match) return null;
+                            const unit = { mg: 'mg', ml: 'mL' }[match[2].toLowerCase()] || 'µL';
+                            return parseCustomDose(match[1], unit);
+                        })
+                        .filter((value) => value && !PRESET_DOSES.includes(value)))];
+                    return p;
+                });
+                return state;
+            }
+
+            function persistLocalState() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                        ...appState,
+                        pendingCloud: pendingCloud?.action ?? null
+                    }));
+                } catch (err) {
+                    showSnackbar('Erro ao salvar no dispositivo.');
+                }
+            }
+
+            function saveState(action = 'save') {
+                appState.version = APP_VERSION;
+                if (action === 'delete') delete appState.updatedAt;
+                else appState.updatedAt = new Date().toISOString();
+                pendingCloud = { action };
+                persistLocalState();
+                void flushCloud();
+            }
+
+            function setCloudStatus(message, retry = false) {
+                document.getElementById('cloud-status').textContent = message;
+                document.getElementById('btn-retry-cloud').classList.toggle('hidden', !retry);
+            }
+
+            async function connectCloud() {
+                if (connectingCloud || writingCloud) return;
+                if (!['https:', 'http:'].includes(location.protocol)) {
+                    setCloudStatus('Salvando neste aparelho. Abra o endereço publicado para usar a nuvem.');
+                    return;
+                }
+                if (!navigator.onLine) {
+                    setCloudStatus('Sem internet. As alterações ficam neste aparelho por enquanto.');
+                    return;
+                }
+
+                connectingCloud = true;
+                setCloudStatus('Conectando à nuvem…');
+                try {
+                    const [firebase, authSDK, firestore] = await Promise.all([
+                        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
+                        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
+                        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
+                    ]);
+                    const app = firebase.getApps()[0] || firebase.initializeApp({
+                        apiKey: "AIzaSyBjVenoxkV4NO45jizP2cM_TPLH_M55pPQ",
+                        authDomain: "agendacf-87019.firebaseapp.com",
+                        projectId: "agendacf-87019",
+                        storageBucket: "agendacf-87019.firebasestorage.app",
+                        messagingSenderId: "1092563028524",
+                        appId: "1:1092563028524:web:705ec0b5548764d4475f89"
+                    });
+                    const auth = authSDK.getAuth(app);
+                    await auth.authStateReady();
+                    const user = auth.currentUser || (await authSDK.signInAnonymously(auth)).user;
+                    const db = firestore.getFirestore(app);
+                    const ref = firestore.doc(db, 'users', user.uid, 'agenda', 'state');
+                    const snapshot = await firestore.getDocFromServer(ref);
+
+                    if (!pendingCloud && snapshot.exists()) {
+                        const state = snapshot.data();
+                        if (!Array.isArray(state.profiles) || state.profiles.length !== 2) {
+                            throw new Error('Formato de dados inválido no Firestore.');
+                        }
+                        appState = normalizeState(state);
+                        persistLocalState();
+                        applyFontScale(appState.fontScale);
+                        applyActiveThemeColors();
+                        updateProfileUI();
+                        renderAll();
+                        renderSettingsModal();
+                    } else if (!pendingCloud && !snapshot.exists() &&
+                        (appState.updatedAt || appState.profiles.some((p) => p.doses.length || p.weights.length))) {
+                        pendingCloud = { action: 'save' };
+                        persistLocalState();
+                    }
+
+                    cloud = { ref, setDoc: firestore.setDoc, deleteDoc: firestore.deleteDoc };
+                    setCloudStatus('Nuvem conectada.');
+                    void flushCloud();
+                } catch (error) {
+                    console.error('Erro na conexão com o Firebase:', error);
+                    setCloudStatus('Nuvem indisponível. Os dados continuam neste aparelho.', true);
+                } finally {
+                    connectingCloud = false;
+                }
+            }
+
+            async function flushCloud() {
+                if (!cloud || !pendingCloud || writingCloud) return;
+                if (!navigator.onLine) {
+                    setCloudStatus('Sem internet. As alterações ficam neste aparelho por enquanto.');
+                    return;
+                }
+                writingCloud = true;
+                setCloudStatus('Salvando na nuvem…');
+                try {
+                    while (pendingCloud) {
+                        const change = pendingCloud;
+                        if (change.action === 'delete') {
+                            await cloud.deleteDoc(cloud.ref);
+                        } else {
+                            const snapshot = JSON.parse(JSON.stringify(appState));
+                            await cloud.setDoc(cloud.ref, snapshot);
+                        }
+                        if (pendingCloud === change) {
+                            pendingCloud = null;
+                            persistLocalState();
+                        }
+                    }
+                    setCloudStatus('Dados atualizados na nuvem.');
+                } catch (error) {
+                    console.error('Erro ao atualizar o Firestore:', error);
+                    setCloudStatus('Alterações salvas no aparelho. Falta atualizar a nuvem.', true);
+                } finally {
+                    writingCloud = false;
+                }
+            }
+
+            function getActiveProfile() {
+                return appState.profiles[appState.activeProfile] || appState.profiles[0];
+            }
+
+            // =====================================================================
+            // MOTOR DE CORES DINÂMICAS POR PERFIL (PRESETS + COR LIVRE)
+            // =====================================================================
+            function hexToRgb(hex) {
+                const clean = String(hex || '#006A60').replace('#', '');
+                const num = parseInt(clean.length === 3 ? clean.split('').map(c => c + c).join('') : clean, 16);
+                return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+            }
+
+            function mixHex(hex1, hex2, weight) {
+                const c1 = hexToRgb(hex1);
+                const c2 = hexToRgb(hex2);
+                const r = Math.round(c1.r * (1 - weight) + c2.r * weight);
+                const g = Math.round(c1.g * (1 - weight) + c2.g * weight);
+                const b = Math.round(c1.b * (1 - weight) + c2.b * weight);
+                return `#${[r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')}`;
+            }
+
+            function getProfilePalette(profile, isDark) {
+                if (profile.themeKey === 'custom' && profile.customHex) {
+                    const base = profile.customHex;
+                    if (!isDark) {
+                        return {
+                            primary: base,
+                            onPrimary: '#FFFFFF',
+                            primaryContainer: mixHex(base, '#FFFFFF', 0.82),
+                            onPrimaryContainer: mixHex(base, '#000000', 0.65),
+                            secondaryContainer: mixHex(base, '#E8ECEB', 0.78),
+                            onSecondaryContainer: mixHex(base, '#111514', 0.65)
+                        };
+                    } else {
+                        return {
+                            primary: mixHex(base, '#FFFFFF', 0.45),
+                            onPrimary: mixHex(base, '#000000', 0.72),
+                            primaryContainer: mixHex(base, '#000000', 0.35),
+                            onPrimaryContainer: mixHex(base, '#FFFFFF', 0.85),
+                            secondaryContainer: mixHex(base, '#1E2423', 0.62),
+                            onSecondaryContainer: mixHex(base, '#FFFFFF', 0.82)
+                        };
+                    }
+                }
+                const preset = THEME_PRESETS[profile.themeKey] || THEME_PRESETS.sage;
+                return isDark ? preset.dark : preset.light;
+            }
+
+            function applyActiveThemeColors() {
+                const isDark = document.documentElement.classList.contains('dark');
+                const palette = getProfilePalette(getActiveProfile(), isDark);
+                const root = document.documentElement.style;
+
+                root.setProperty('--primary', palette.primary);
+                root.setProperty('--on-primary', palette.onPrimary);
+                root.setProperty('--primary-container', palette.primaryContainer);
+                root.setProperty('--on-primary-container', palette.onPrimaryContainer);
+                root.setProperty('--secondary-container', palette.secondaryContainer);
+                root.setProperty('--on-secondary-container', palette.onSecondaryContainer);
+            }
+
+            function getProfileSwatchColor(profile) {
+                if (profile.themeKey === 'custom' && profile.customHex) return profile.customHex;
+                return (THEME_PRESETS[profile.themeKey] || THEME_PRESETS.sage).swatch;
+            }
+
+            // =====================================================================
+            // ACESSIBILIDADE: ESCALA DE FONTE
+            // =====================================================================
+            function applyFontScale(scale) {
+                const valid = ['normal', 'large', 'xlarge'].includes(scale) ? scale : 'normal';
+                appState.fontScale = valid;
+                const html = document.documentElement;
+                html.classList.remove('font-large', 'font-xlarge');
+                if (valid === 'large') html.classList.add('font-large');
+                if (valid === 'xlarge') html.classList.add('font-xlarge');
+
+                document.querySelectorAll('.font-scale-btn').forEach((btn) => {
+                    const active = btn.getAttribute('data-font-scale') === valid;
+                    btn.setAttribute('aria-pressed', String(active));
+                    btn.classList.toggle('m3-secondary-container', active);
+                    btn.classList.toggle('border', !active);
+                    btn.classList.toggle('m3-border', !active);
+                });
+            }
+
+            // =====================================================================
+            // UTILITÁRIOS DE DATA E TEXTO
+            // =====================================================================
+            function getTodayISO() {
+                const now = new Date();
+                const offset = now.getTimezoneOffset();
+                return new Date(now.getTime() - offset * 60000).toISOString().split('T')[0];
+            }
+
+            function parseLocalISO(iso) {
+                const parts = (iso || getTodayISO()).split('-').map(Number);
+                return new Date(parts[0], parts[1] - 1, parts[2]);
+            }
+
+            function formatBR(iso) {
+                if (!iso || !iso.includes('-')) return '--/--/----';
+                const [y, m, d] = iso.split('-');
+                return `${d}/${m}/${y}`;
+            }
+
+            function addDaysISO(iso, days) {
+                const d = parseLocalISO(iso);
+                d.setDate(d.getDate() + days);
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            }
+
+            function diffDays(startISO, endISO) {
+                return Math.round((parseLocalISO(endISO) - parseLocalISO(startISO)) / 86400000);
+            }
+
+            function formatKg(num) {
+                return Number(num).toFixed(1).replace('.', ',');
+            }
+
+            function escapeHTML(str) {
+                return String(str || '').replace(/[&<>"']/g, (ch) => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[ch]));
+            }
+
+            function getNextSuggestedSite(lastSite) {
+                if (!lastSite) return ROTATION_SITES[0];
+                const normalized = lastSite
+                    .replace('Esquerdo', 'Esq.')
+                    .replace('Direito', 'Dir.')
+                    .replace('Esquerda', 'Esq.')
+                    .replace('Direita', 'Dir.');
+                const idx = ROTATION_SITES.findIndex((s) => normalized.includes(s));
+                return idx >= 0 ? ROTATION_SITES[(idx + 1) % ROTATION_SITES.length] : ROTATION_SITES[0];
+            }
+
+            let snackbarTimer = null;
+            function showSnackbar(msg) {
+                const el = document.getElementById('snackbar');
+                const txt = document.getElementById('snackbar-text');
+                if (!el || !txt) return;
+                txt.textContent = msg;
+                el.classList.remove('opacity-0', 'translate-y-2');
+                el.classList.add('opacity-100', 'translate-y-0');
+                clearTimeout(snackbarTimer);
+                snackbarTimer = setTimeout(() => {
+                    el.classList.remove('opacity-100', 'translate-y-0');
+                    el.classList.add('opacity-0', 'translate-y-2');
+                }, 2400);
+            }
+
+            // =====================================================================
+            // TEMA CLARO / ESCURO & CABEÇALHO DE PERFIS
+            // =====================================================================
+            function initTheme() {
+                const saved = localStorage.getItem(THEME_KEY);
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setDarkMode(saved ? saved === 'dark' : prefersDark);
+            }
+
+            function setDarkMode(isDark) {
+                document.documentElement.classList.toggle('dark', isDark);
+                const moon = document.getElementById('icon-moon');
+                const sun = document.getElementById('icon-sun');
+                if (moon && sun) {
+                    moon.classList.toggle('hidden', isDark);
+                    sun.classList.toggle('hidden', !isDark);
+                }
+                applyActiveThemeColors();
+            }
+
+            function toggleTheme() {
+                const isDark = !document.documentElement.classList.contains('dark');
+                localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+                setDarkMode(isDark);
+            }
+
+            function switchProfile(idx) {
+                appState.activeProfile = idx === 1 ? 1 : 0;
+                saveState();
+                applyActiveThemeColors();
+                updateProfileUI();
+                renderAll();
+            }
+
+            function updateProfileUI() {
+                const idx = appState.activeProfile;
+                const p0 = appState.profiles[0];
+                const p1 = appState.profiles[1];
+
+                document.getElementById('label-profile-0').textContent = p0.name;
+                document.getElementById('label-profile-1').textContent = p1.name;
+                document.getElementById('dot-profile-0').style.backgroundColor = getProfileSwatchColor(p0);
+                document.getElementById('dot-profile-1').style.backgroundColor = getProfileSwatchColor(p1);
+
+                document.querySelectorAll('.active-profile-label').forEach((el) => {
+                    el.textContent = getActiveProfile().name;
+                });
+
+                const seg0 = document.getElementById('seg-profile-0');
+                const seg1 = document.getElementById('seg-profile-1');
+
+                if (idx === 0) {
+                    seg0.className = 'min-h-[2.5rem] py-1.5 px-3 rounded-full m3-secondary-container flex items-center justify-center gap-2 text-sm font-bold spring-btn';
+                    seg1.className = 'min-h-[2.5rem] py-1.5 px-3 rounded-full m3-text-var flex items-center justify-center gap-2 text-sm font-semibold spring-btn';
+                } else {
+                    seg1.className = 'min-h-[2.5rem] py-1.5 px-3 rounded-full m3-secondary-container flex items-center justify-center gap-2 text-sm font-bold spring-btn';
+                    seg0.className = 'min-h-[2.5rem] py-1.5 px-3 rounded-full m3-text-var flex items-center justify-center gap-2 text-sm font-semibold spring-btn';
+                }
+
+                const b0 = document.getElementById('badge-active-0');
+                const b1 = document.getElementById('badge-active-1');
+                if (b0 && b1) {
+                    b0.classList.toggle('hidden', idx !== 0);
+                    b1.classList.toggle('hidden', idx !== 1);
+                }
+            }
+
+            // =====================================================================
+            // NAVEGAÇÃO ENTRE ABAS (INÍCIO, AGENDA, PESO)
+            // =====================================================================
+            function switchTab(tabName) {
+                activeTab = tabName;
+                ['home', 'calendar', 'weight'].forEach((name) => {
+                    const view = document.getElementById(`view-${name}`);
+                    if (view) view.classList.toggle('hidden', name !== tabName);
+                });
+
+                document.querySelectorAll('.nav-tab-btn').forEach((btn) => {
+                    const isSelected = btn.getAttribute('data-tab') === tabName;
+                    const pill = btn.querySelector('.nav-pill');
+                    const txt = btn.querySelector('.nav-text');
+                    if (isSelected) {
+                        pill.className = 'nav-pill w-16 h-8 rounded-full m3-secondary-container flex items-center justify-center transition-all';
+                        txt.className = 'nav-text text-xs font-bold leading-none';
+                    } else {
+                        pill.className = 'nav-pill w-16 h-8 rounded-full flex items-center justify-center transition-all m3-text-var';
+                        txt.className = 'nav-text text-xs font-medium m3-text-var leading-none';
+                    }
+                });
+
+                if (tabName === 'calendar') renderCalendar();
+                if (tabName === 'weight') renderWeight();
+            }
+
+            // =====================================================================
+            // RENDERIZAÇÃO: ABA 1 - INÍCIO
+            // =====================================================================
+            function renderHome() {
+                const profile = getActiveProfile();
+                const doses = [...profile.doses].sort((a, b) => b.date.localeCompare(a.date));
+                const weights = [...profile.weights].sort((a, b) => a.date.localeCompare(b.date));
+
+                const today = getTodayISO();
+                const month = today.slice(0, 7);
+                const isThisMonth = (record) => record.date.startsWith(month + '-') && record.date <= today;
+                const monthDoses = doses.filter(isThisMonth).length;
+                const monthWeights = weights.filter(isThisMonth);
+                document.getElementById('home-month-title').textContent =
+                    new Date().toLocaleDateString('pt-BR', { month: 'long' });
+                document.getElementById('home-month-doses').textContent =
+                    `${monthDoses} ${monthDoses === 1 ? 'dose registrada' : 'doses registradas'}`;
+
+                let weightSummary = 'Variação de peso precisa de 2 pesagens no mês';
+                if (monthWeights.length >= 2) {
+                    const delta = Math.round((monthWeights.at(-1).weight - monthWeights[0].weight) * 10) / 10;
+                    if (delta < 0) weightSummary = `Perdeu ${formatKg(-delta)} kg`;
+                    else if (delta > 0) weightSummary = `Ganhou ${formatKg(delta)} kg`;
+                    else weightSummary = 'Peso sem variação';
+                }
+                document.getElementById('home-month-weight').textContent = weightSummary;
+
+                const emptyCard = document.getElementById('home-empty-card');
+                const recentWrapper = document.getElementById('home-recent-wrapper');
+                const rotationPill = document.getElementById('home-rotation-pill');
+
+                const hasData = doses.length > 0 || weights.length > 0;
+                emptyCard.classList.toggle('hidden', hasData);
+                recentWrapper.classList.toggle('hidden', !hasData);
+
+                if (doses.length > 0) {
+                    const latest = doses[0];
+                    const nextISO = addDaysISO(latest.date, profile.intervalDays);
+                    const daysLeft = diffDays(getTodayISO(), nextISO);
+
+                    let countdownLabel = '';
+                    if (daysLeft > 1) countdownLabel = `Em ${daysLeft} dias`;
+                    else if (daysLeft === 1) countdownLabel = 'Amanhã';
+                    else if (daysLeft === 0) countdownLabel = 'Hoje';
+                    else countdownLabel = `Atrasada ${Math.abs(daysLeft)} ${Math.abs(daysLeft) === 1 ? 'dia' : 'dias'}`;
+
+                    document.getElementById('home-countdown').textContent = countdownLabel;
+                    document.getElementById('home-next-date').textContent = `Prevista para ${formatBR(nextISO)}`;
+                    document.getElementById('home-current-dose').textContent = latest.dose;
+
+                    rotationPill.classList.remove('hidden');
+                    document.getElementById('home-rotation-text').textContent = `Sugestão: ${getNextSuggestedSite(latest.site)}`;
+                } else {
+                    document.getElementById('home-countdown').textContent = 'Sem registros';
+                    document.getElementById('home-next-date').textContent = 'Toque no + para anotar';
+                    document.getElementById('home-current-dose').textContent = '—';
+                    rotationPill.classList.add('hidden');
+                }
+
+                const diffEl = document.getElementById('home-weight-diff');
+                if (weights.length >= 2) {
+                    const delta = weights[weights.length - 1].weight - weights[0].weight;
+                    const sign = delta > 0 ? '+' : '';
+                    diffEl.textContent = `${sign}${formatKg(delta)} kg`;
+                    diffEl.className = `font-display text-2xl font-extrabold tracking-tight mt-2 ${delta <= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`;
+                } else if (weights.length === 1) {
+                    diffEl.textContent = `${formatKg(weights[0].weight)} kg`;
+                    diffEl.className = 'font-display text-2xl font-extrabold tracking-tight mt-2';
+                } else {
+                    diffEl.textContent = '-- kg';
+                    diffEl.className = 'font-display text-2xl font-extrabold tracking-tight mt-2';
+                }
+
+                const recentItems = [
+                    ...doses.map((d) => ({
+                        kind: 'dose',
+                        id: d.id,
+                        date: d.date,
+                        title: `${d.dose} • ${d.site}`,
+                        sub: `${formatBR(d.date)}${d.brand ? ` • ${d.brand}` : ''}`
+                    })),
+                    ...weights.map((w) => ({
+                        kind: 'weight',
+                        id: w.id,
+                        date: w.date,
+                        title: `${formatKg(w.weight)} kg`,
+                        sub: `${formatBR(w.date)} • Pesagem`
+                    }))
+                ].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+
+                const listEl = document.getElementById('home-recent-list');
+                listEl.innerHTML = recentItems.map((item) => `
+                    <div class="rounded-[20px] m3-surface-low px-4 py-3 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-9 h-9 rounded-[13px] ${item.kind === 'dose' ? 'm3-primary-container' : 'm3-tertiary-container'} flex items-center justify-center shrink-0">
+                                ${item.kind === 'dose'
+                                    ? '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m5 19-3 3"/></svg>'
+                                    : '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>'
+                                }
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-display text-sm font-bold leading-snug">${escapeHTML(item.title)}</p>
+                                <p class="text-xs m3-text-var leading-snug">${escapeHTML(item.sub)}</p>
+                            </div>
+                        </div>
+                        <button type="button" data-delete-kind="${item.kind}" data-delete-id="${escapeHTML(item.id)}" class="w-8 h-8 rounded-full hover:bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0 spring-btn opacity-75 hover:opacity-100" title="Excluir">
+                            <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // =====================================================================
+            // RENDERIZAÇÃO: ABA 2 - AGENDA (CALENDÁRIO MENSAL)
+            // =====================================================================
+            function renderCalendar() {
+                const year = calendarMonthDate.getFullYear();
+                const month = calendarMonthDate.getMonth();
+
+                const title = new Date(year, month, 1).toLocaleDateString('pt-BR', {
+                    month: 'long',
+                    year: 'numeric'
+                });
+                document.getElementById('cal-month-title').textContent = title;
+
+                const firstWeekday = new Date(year, month, 1).getDay();
+                const totalDays = new Date(year, month + 1, 0).getDate();
+
+                const profile = getActiveProfile();
+                const doseSet = new Set(profile.doses.map((d) => d.date));
+                const weightSet = new Set(profile.weights.map((w) => w.date));
+
+                let predictedISO = null;
+                if (profile.doses.length > 0) {
+                    const sorted = [...profile.doses].sort((a, b) => b.date.localeCompare(a.date));
+                    predictedISO = addDaysISO(sorted[0].date, profile.intervalDays);
+                }
+
+                const todayISO = getTodayISO();
+                const cells = [];
+
+                for (let i = 0; i < firstWeekday; i++) {
+                    cells.push('<div class="min-h-[2.75rem]"></div>');
+                }
+
+                for (let d = 1; d <= totalDays; d++) {
+                    const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const hasDose = doseSet.has(iso);
+                    const hasWeight = weightSet.has(iso);
+                    const isPredicted = iso === predictedISO && !hasDose;
+                    const isSelected = iso === selectedDateISO;
+                    const isToday = iso === todayISO;
+
+                    let cls = 'cal-day-btn min-h-[2.75rem] py-1 rounded-[15px] flex flex-col items-center justify-center text-xs font-bold spring-btn ';
+                    let style = '';
+
+                    if (isSelected) {
+                        cls += 'm3-primary shadow-xs ';
+                    } else if (hasDose) {
+                        cls += 'm3-primary-container ';
+                    } else if (isPredicted) {
+                        cls += 'border-2 border-dashed ';
+                        style = 'border-color: var(--primary); color: var(--primary);';
+                    } else if (isToday) {
+                        cls += 'm3-surface-high ';
+                    } else {
+                        cls += 'hover:opacity-80 ';
+                    }
+
+                    const doseDotColor = isSelected ? 'var(--on-primary)' : 'var(--primary)';
+
+                    cells.push(`
+                        <button type="button" data-cal-iso="${iso}" class="${cls}" style="${style}">
+                            <span class="pointer-events-none">${d}</span>
+                            <span class="flex items-center gap-0.5 mt-0.5 h-1.5 pointer-events-none">
+                                ${hasDose ? `<span class="w-1.5 h-1.5 rounded-full" style="background-color: ${doseDotColor};"></span>` : ''}
+                                ${hasWeight ? '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>' : ''}
+                            </span>
+                        </button>
+                    `);
+                }
+
+                document.getElementById('cal-days-grid').innerHTML = cells.join('');
+                renderCalendarDayDetails();
+            }
+
+            function renderCalendarDayDetails() {
+                document.getElementById('cal-selected-label').textContent = formatBR(selectedDateISO);
+
+                const profile = getActiveProfile();
+                const dayDoses = profile.doses.filter((d) => d.date === selectedDateISO);
+                const dayWeights = profile.weights.filter((w) => w.date === selectedDateISO);
+
+                let isPredicted = false;
+                if (profile.doses.length > 0) {
+                    const sorted = [...profile.doses].sort((a, b) => b.date.localeCompare(a.date));
+                    if (addDaysISO(sorted[0].date, profile.intervalDays) === selectedDateISO && dayDoses.length === 0) {
+                        isPredicted = true;
+                    }
+                }
+
+                const container = document.getElementById('cal-day-records');
+                if (dayDoses.length === 0 && dayWeights.length === 0 && !isPredicted) {
+                    container.innerHTML = '<p class="text-xs m3-text-var text-center py-3 rounded-[16px] m3-surface">Nenhum registro neste dia</p>';
+                    return;
+                }
+
+                const rows = [];
+                if (isPredicted) {
+                    rows.push(`
+                        <div class="p-3 rounded-[16px] border-2 border-dashed text-xs font-bold" style="border-color: var(--primary); color: var(--primary);">
+                            Próxima dose prevista (+${profile.intervalDays} ${profile.intervalDays === 1 ? 'dia' : 'dias'})
+                        </div>
+                    `);
+                }
+
+                dayDoses.forEach((d) => {
+                    rows.push(`
+                        <div class="p-3.5 rounded-[16px] m3-primary-container flex items-center justify-between gap-2">
+                            <div class="text-xs min-w-0">
+                                <p class="font-display font-bold">${escapeHTML(d.dose)} • ${escapeHTML(d.site)}</p>
+                                <p class="opacity-80 mt-0.5">${escapeHTML(d.brand || 'Mounjaro')}${d.quantity ? ` • ${escapeHTML(d.quantity)}` : ''}${d.notes ? ` • "${escapeHTML(d.notes)}"` : ''}</p>
+                            </div>
+                            <button type="button" data-delete-kind="dose" data-delete-id="${escapeHTML(d.id)}" class="w-8 h-8 rounded-full hover:bg-black/10 flex items-center justify-center shrink-0" title="Excluir">
+                                <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    `);
+                });
+
+                dayWeights.forEach((w) => {
+                    rows.push(`
+                        <div class="p-3.5 rounded-[16px] m3-tertiary-container flex items-center justify-between gap-2">
+                            <span class="font-display text-xs font-bold">Peso: ${formatKg(w.weight)} kg</span>
+                            <button type="button" data-delete-kind="weight" data-delete-id="${escapeHTML(w.id)}" class="w-8 h-8 rounded-full hover:bg-black/10 flex items-center justify-center shrink-0" title="Excluir">
+                                <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    `);
+                });
+
+                container.innerHTML = rows.join('');
+            }
+
+            // =====================================================================
+            // RENDERIZAÇÃO: ABA 3 - PESO & GRÁFICO SVG
+            // =====================================================================
+            function renderWeight() {
+                const profile = getActiveProfile();
+                const asc = [...profile.weights].sort((a, b) => a.date.localeCompare(b.date));
+                const desc = [...asc].reverse();
+
+                const curEl = document.getElementById('weight-current-val');
+                const badgeEl = document.getElementById('weight-total-badge');
+
+                if (asc.length > 0) {
+                    const first = asc[0].weight;
+                    const last = asc[asc.length - 1].weight;
+                    curEl.textContent = `${formatKg(last)} kg`;
+
+                    if (asc.length >= 2) {
+                        const diff = last - first;
+                        const sign = diff > 0 ? '+' : '';
+                        badgeEl.textContent = `${sign}${formatKg(diff)} kg`;
+                        badgeEl.className = `px-2.5 py-0.5 rounded-full text-xs font-bold ${diff <= 0 ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/15 text-amber-600 dark:text-amber-400'}`;
+                    } else {
+                        badgeEl.textContent = 'Inicial';
+                        badgeEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold m3-surface';
+                    }
+                } else {
+                    curEl.textContent = '-- kg';
+                    badgeEl.textContent = 'Sem registros';
+                    badgeEl.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold m3-surface';
+                }
+
+                renderWeightSVG(asc);
+
+                const listEl = document.getElementById('weight-list');
+                if (desc.length === 0) {
+                    listEl.innerHTML = '<div class="rounded-[20px] m3-surface-low p-5 text-center text-xs m3-text-var">Nenhuma pesagem registrada ainda.</div>';
+                    return;
+                }
+
+                listEl.innerHTML = desc.map((item, idx) => {
+                    const prev = desc[idx + 1];
+                    let deltaBadge = '<span class="text-[11px] m3-text-var">Inicial</span>';
+                    if (prev) {
+                        const delta = item.weight - prev.weight;
+                        const sign = delta > 0 ? '+' : '';
+                        const cls = delta <= 0
+                            ? 'bg-emerald-500/12 text-emerald-600 dark:text-emerald-400'
+                            : 'bg-amber-500/12 text-amber-600 dark:text-amber-400';
+                        deltaBadge = `<span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${cls}">${sign}${formatKg(delta)} kg</span>`;
+                    }
+
+                    return `
+                        <div class="rounded-[20px] m3-surface-low px-4 py-3 flex items-center justify-between gap-2 flex-wrap">
+                            <span class="text-xs font-semibold m3-text-var">${formatBR(item.date)}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="font-display text-sm font-extrabold">${formatKg(item.weight)} kg</span>
+                                ${deltaBadge}
+                                <button type="button" data-delete-kind="weight" data-delete-id="${escapeHTML(item.id)}" class="w-8 h-8 rounded-full hover:bg-rose-500/10 text-rose-500 flex items-center justify-center spring-btn opacity-75 hover:opacity-100" title="Excluir">
+                                    <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function renderWeightSVG(asc) {
+                const box = document.getElementById('weight-chart-box');
+                if (asc.length === 0) {
+                    box.innerHTML = '<div class="h-24 rounded-[18px] m3-surface flex items-center justify-center text-xs m3-text-var px-3 text-center">Registre seu peso para ver a evolução</div>';
+                    return;
+                }
+
+                const W = 320;
+                const H = 115;
+                const padX = 20;
+                const padY = 22;
+
+                if (asc.length === 1) {
+                    const p = asc[0];
+                    box.innerHTML = `
+                        <svg viewBox="0 0 ${W} ${H}" class="w-full h-28 overflow-visible">
+                            <line x1="${padX}" y1="${H / 2}" x2="${W - padX}" y2="${H / 2}" stroke="var(--outline-var)" stroke-width="2" stroke-dasharray="4 4" />
+                            <circle cx="${W / 2}" cy="${H / 2}" r="6" fill="var(--primary)" />
+                            <text x="${W / 2}" y="${H / 2 - 12}" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">${formatKg(p.weight)} kg</text>
+                        </svg>
+                        <div class="text-center text-[11px] font-semibold m3-text-var">${formatBR(p.date)}</div>
+                    `;
+                    return;
+                }
+
+                const vals = asc.map((w) => w.weight);
+                const minV = Math.min(...vals);
+                const maxV = Math.max(...vals);
+                const span = maxV - minV || 1;
+
+                const pts = asc.map((w, i) => {
+                    const x = padX + (i / (asc.length - 1)) * (W - padX * 2);
+                    const y = H - padY - ((w.weight - minV) / span) * (H - padY * 2);
+                    return { x, y, label: formatBR(w.date).slice(0, 5), weight: w.weight };
+                });
+
+                let linePath = `M ${pts[0].x} ${pts[0].y}`;
+                for (let i = 0; i < pts.length - 1; i++) {
+                    const p0 = pts[i];
+                    const p1 = pts[i + 1];
+                    const midX = (p0.x + p1.x) / 2;
+                    linePath += ` C ${midX} ${p0.y}, ${midX} ${p1.y}, ${p1.x} ${p1.y}`;
+                }
+
+                const areaPath = `${linePath} L ${pts[pts.length - 1].x} ${H} L ${pts[0].x} ${H} Z`;
+
+                box.innerHTML = `
+                    <svg viewBox="0 0 ${W} ${H}" class="w-full h-32 overflow-visible">
+                        <defs>
+                            <linearGradient id="weightAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" style="stop-color: var(--primary); stop-opacity: 0.24;" />
+                                <stop offset="100%" style="stop-color: var(--primary); stop-opacity: 0;" />
+                            </linearGradient>
+                        </defs>
+                        <path d="${areaPath}" fill="url(#weightAreaGrad)" />
+                        <path d="${linePath}" fill="none" stroke="var(--primary)" stroke-width="3.2" stroke-linecap="round" />
+                        ${pts.map((pt, idx) => `
+                            <circle cx="${pt.x}" cy="${pt.y}" r="${idx === pts.length - 1 ? 5 : 3.5}" fill="var(--primary)" stroke="var(--surface-low)" stroke-width="2" />
+                        `).join('')}
+                    </svg>
+                    <div class="flex justify-between gap-2 flex-wrap text-[11px] font-bold m3-text-var px-2">
+                        <span>${pts[0].label} (${formatKg(pts[0].weight)}kg)</span>
+                        <span>${pts[pts.length - 1].label} (${formatKg(pts[pts.length - 1].weight)}kg)</span>
+                    </div>
+                `;
+            }
+
+            // =====================================================================
+            // RENDERIZAÇÃO: MODAL DE CONFIGURAÇÕES (ACF.18.11#4)
+            // =====================================================================
+            function buildReport(profile, start, end) {
+                const inPeriod = (record) => record.date >= start && record.date <= end;
+                const byDate = (a, b) => a.date.localeCompare(b.date);
+                const doses = profile.doses.filter(inPeriod).sort(byDate);
+                const weights = profile.weights.filter(inPeriod).sort(byDate);
+                const doseHeading = doses.length === 1 ? '💉 Doses (1 aplicação)' : `💉 Doses (${doses.length} aplicações)`;
+                const blocks = [
+                    `📋 Agenda CF — ${profile.name}\n${formatBR(start)} a ${formatBR(end)}`,
+                    doseHeading
+                ];
+
+                if (doses.length === 0) blocks.push('Nenhuma aplicação registrada no período.');
+                for (const dose of doses) {
+                    blocks.push([
+                        formatBR(dose.date),
+                        `Dose: ${dose.dose}`,
+                        `Marca: ${dose.brand || 'Não registrada'}`,
+                        `Local: ${dose.site || 'Não registrado'}`
+                    ].join('\n'));
+                }
+
+                let summary = 'Nenhuma pesagem registrada no período.';
+                if (weights.length === 1) {
+                    summary = 'Há só uma pesagem no período. São necessárias duas para calcular a variação.';
+                } else if (weights.length >= 2) {
+                    const first = weights[0];
+                    const last = weights[weights.length - 1];
+                    const delta = Math.round((last.weight - first.weight) * 10) / 10;
+                    const change = delta === 0 ? 'Peso sem variação no período.' :
+                        `${delta < 0 ? 'Perdeu' : 'Ganhou'} ${formatKg(Math.abs(delta))} kg no período.`;
+                    summary = `${change}\n${formatBR(first.date)}: ${formatKg(first.weight)} kg\n${formatBR(last.date)}: ${formatKg(last.weight)} kg`;
+                }
+
+                blocks.push(`⚖️ Peso no período\n${summary}`);
+                return blocks.join('\n\n');
+            }
+
+            function renderReport() {
+                const profile = getActiveProfile();
+                const period = document.getElementById('report-period').value;
+                const custom = period === 'custom';
+                const today = getTodayISO();
+                const start = custom ? document.getElementById('report-start').value : addDaysISO(today, 1 - Number(period));
+                const end = custom ? document.getElementById('report-end').value : today;
+
+                document.getElementById('report-profile').textContent = `Perfil ativo: ${profile.name}`;
+                document.getElementById('report-custom-dates').classList.toggle('hidden', !custom);
+                document.getElementById('report-copy-status').textContent = '';
+
+                let message = '';
+                if (!start || !end) message = 'Preencha as duas datas para gerar o relatório.';
+                else if (start > end) message = 'A data inicial precisa ser anterior ou igual à data final.';
+                const error = document.getElementById('report-error');
+                error.textContent = message;
+                error.classList.toggle('hidden', !message);
+
+                document.getElementById('btn-copy-report').disabled = Boolean(message);
+                document.getElementById('report-text').value = message ? '' : buildReport(profile, start, end);
+            }
+
+            async function copyReport() {
+                const preview = document.getElementById('report-text');
+                const status = document.getElementById('report-copy-status');
+                if (!preview.value) return;
+
+                try {
+                    if (navigator.clipboard?.writeText) {
+                        await navigator.clipboard.writeText(preview.value);
+                        status.textContent = 'Relatório copiado!';
+                        return;
+                    }
+                } catch {
+                    // Arquivos locais podem bloquear a API de área de transferência.
+                }
+
+                preview.focus();
+                preview.select();
+                let copied = false;
+                try {
+                    copied = document.execCommand('copy');
+                } catch {
+                    // A prévia fica selecionada para cópia manual.
+                }
+                status.textContent = copied ? 'Relatório copiado!' : 'Texto selecionado. Use a opção Copiar do aparelho.';
+            }
+
+            function renderSettingsModal() {
+                renderReport();
+                const profile = getActiveProfile();
+                document.getElementById('settings-dose-profile').textContent = `Perfil ativo: ${profile.name}`;
+                document.getElementById('settings-interval').value = profile.intervalDays;
+                for (const [listId, key] of [
+                    ['settings-brands-list', 'brands'],
+                    ['settings-custom-doses-list', 'customDoses']
+                ]) {
+                    const list = document.getElementById(listId);
+                    list.replaceChildren();
+                    profile[key].forEach((value, index) => {
+                        const item = document.createElement('li');
+                        item.className = 'inline-flex items-center gap-2 rounded-full m3-surface-low px-3 py-1 text-xs font-bold break-all';
+                        item.textContent = value;
+                        const remove = document.createElement('button');
+                        remove.type = 'button';
+                        remove.className = 'w-7 h-7 shrink-0 rounded-full spring-btn';
+                        remove.textContent = '×';
+                        remove.setAttribute('aria-label', `Remover ${value}`);
+                        remove.addEventListener('click', () => {
+                            profile[key].splice(index, 1);
+                            saveState();
+                            renderSettingsModal();
+                        });
+                        item.append(remove);
+                        list.append(item);
+                    });
+                }
+                document.getElementById('settings-name-0').value = appState.profiles[0].name;
+                document.getElementById('settings-name-1').value = appState.profiles[1].name;
+
+                [0, 1].forEach((idx) => {
+                    const profile = appState.profiles[idx];
+                    const container = document.getElementById(`swatches-profile-${idx}`);
+                    if (!container) return;
+
+                    const presetButtons = Object.entries(THEME_PRESETS).map(([key, item]) => {
+                        const isSelected = profile.themeKey === key;
+                        return `
+                            <button type="button" data-set-theme-profile="${idx}" data-theme-key="${key}" title="${item.name}"
+                                class="w-9 h-9 rounded-full flex items-center justify-center spring-btn relative ${isSelected ? 'ring-2 ring-offset-2' : 'opacity-85 hover:opacity-100'}"
+                                style="background-color: ${item.swatch}; --tw-ring-color: ${item.swatch}; --tw-ring-offset-color: var(--surface-mid);">
+                                ${isSelected ? '<svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+                            </button>
+                        `;
+                    }).join('');
+
+                    const isCustom = profile.themeKey === 'custom';
+                    const customPicker = `
+                        <label title="Escolher outra cor" class="w-9 h-9 rounded-full flex items-center justify-center spring-btn cursor-pointer border-2 border-dashed m3-border relative overflow-hidden ${isCustom ? 'ring-2 ring-offset-2' : ''}"
+                            style="${isCustom ? `background-color: ${profile.customHex}; --tw-ring-color: ${profile.customHex}; --tw-ring-offset-color: var(--surface-mid);` : ''}">
+                            <svg class="w-4 h-4 ${isCustom ? 'text-white' : 'm3-text-var'} pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+                            <input type="color" data-custom-color-profile="${idx}" value="${escapeHTML(profile.customHex || '#006A60')}" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
+                        </label>
+                    `;
+
+                    container.innerHTML = presetButtons + customPicker;
+                });
+            }
+
+            // =====================================================================
+            // BOTTOM SHEETS & FORMULÁRIOS
+            // =====================================================================
+            function openEntryModal(mode = 'dose', prefillDate = null) {
+                const targetDate = prefillDate || (activeTab === 'calendar' ? selectedDateISO : getTodayISO());
+                const profile = getActiveProfile();
+
+                const latest = [...profile.doses].sort((a, b) => b.date.localeCompare(a.date))[0];
+                const doseChoices = new Set([...PRESET_DOSES, ...profile.customDoses.filter((dose) => !dose.endsWith(' mg'))]);
+                const doseGroup = document.getElementById('dose-chips-group');
+                doseGroup.replaceChildren();
+                for (const dose of doseChoices) {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.dataset.doseVal = dose;
+                    chip.className = 'dose-chip adaptive-chip min-h-10 px-1 break-all rounded-full border m3-border text-xs font-bold spring-btn';
+                    chip.textContent = dose;
+                    doseGroup.append(chip);
+                }
+                const brandChoices = new Map(['Mounjaro', ...profile.brands, latest?.brand]
+                    .filter(Boolean).map((brand) => [brand.toLowerCase(), brand]));
+                const brandOptions = document.getElementById('select-dose-brand');
+                brandOptions.replaceChildren();
+                for (const brand of brandChoices.values()) {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    brandOptions.append(option);
+                }
+
+                const otherBrand = document.createElement('option');
+                otherBrand.value = '';
+                otherBrand.textContent = 'Outra marca…';
+                brandOptions.append(otherBrand);
+                brandOptions.value = brandChoices.get((latest?.brand || profile.brands[0] || 'Mounjaro').toLowerCase());
+
+                document.getElementById('input-dose-date').value = targetDate;
+                document.getElementById('dose-extra-box').classList.add('hidden');
+                document.getElementById('extra-toggle-symbol').textContent = '+';
+                document.getElementById('input-dose-notes').value = '';
+
+                selectDoseChip('');
+                selectSiteChip(latest ? getNextSuggestedSite(latest.site) : ROTATION_SITES[0]);
+                const brandInput = document.getElementById('input-dose-brand');
+                brandInput.value = '';
+                brandInput.required = false;
+                brandInput.classList.add('hidden');
+                document.getElementById('input-dose-qty').value = '';
+
+                document.getElementById('input-weight-date').value = targetDate;
+                document.getElementById('input-weight-kg').value = '';
+
+                setEntrySheetMode(mode);
+                document.getElementById('modal-entry').classList.remove('hidden');
+
+                if (mode === 'weight') {
+                    setTimeout(() => document.getElementById('input-weight-kg').focus(), 120);
+                }
+            }
+
+            function setEntrySheetMode(mode) {
+                const isDose = mode === 'dose';
+                const btnDose = document.getElementById('sheet-mode-dose');
+                const btnWeight = document.getElementById('sheet-mode-weight');
+                const formDose = document.getElementById('form-dose');
+                const formWeight = document.getElementById('form-weight');
+
+                formDose.classList.toggle('hidden', !isDose);
+                formWeight.classList.toggle('hidden', isDose);
+
+                if (isDose) {
+                    btnDose.className = 'min-h-[2.35rem] py-1 px-2 rounded-full m3-secondary-container text-xs font-bold transition-all';
+                    btnWeight.className = 'min-h-[2.35rem] py-1 px-2 rounded-full m3-text-var text-xs font-semibold transition-all';
+                } else {
+                    btnWeight.className = 'min-h-[2.35rem] py-1 px-2 rounded-full m3-secondary-container text-xs font-bold transition-all';
+                    btnDose.className = 'min-h-[2.35rem] py-1 px-2 rounded-full m3-text-var text-xs font-semibold transition-all';
+                }
+            }
+
+            function selectDoseChip(val) {
+                document.getElementById('input-dose-val').value = val;
+                document.querySelectorAll('.dose-chip').forEach((btn) => {
+                    const active = btn.getAttribute('data-dose-val') === val;
+                    btn.setAttribute('aria-pressed', String(active));
+                    btn.classList.toggle('m3-secondary-container', active);
+                    btn.classList.toggle('border', !active);
+                    btn.classList.toggle('m3-border', !active);
+                });
+            }
+
+            function selectSiteChip(val) {
+                document.getElementById('input-dose-site').value = val;
+                document.querySelectorAll('.site-chip').forEach((btn) => {
+                    const active = btn.getAttribute('data-site-val') === val;
+                    btn.setAttribute('aria-pressed', String(active));
+                    btn.classList.toggle('m3-secondary-container', active);
+                    btn.classList.toggle('border', !active);
+                    btn.classList.toggle('m3-border', !active);
+                });
+            }
+
+            function closeModal(id) {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            }
+
+            function openConfirm(title, msg, onConfirm) {
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-msg').textContent = msg;
+                pendingConfirmAction = onConfirm;
+                document.getElementById('modal-confirm').classList.remove('hidden');
+            }
+
+            function renderAll() {
+                renderHome();
+                renderCalendar();
+                renderWeight();
+            }
+
+            // =====================================================================
+            // INICIALIZAÇÃO E EVENTOS APÓS DOMContentLoaded
+            // =====================================================================
+            document.addEventListener('DOMContentLoaded', () => {
+                initTheme();
+                applyFontScale(appState.fontScale);
+                applyActiveThemeColors();
+                updateProfileUI();
+                renderAll();
+
+                // Tema Claro/Escuro
+                document.getElementById('btn-toggle-theme').addEventListener('click', toggleTheme);
+
+                // Abrir Modal de Configurações
+                document.getElementById('btn-open-settings').addEventListener('click', () => {
+                    renderSettingsModal();
+                    updateProfileUI();
+                    document.getElementById('modal-settings').classList.remove('hidden');
+                });
+
+                for (const id of ['report-period', 'report-start', 'report-end']) {
+                    document.getElementById(id).addEventListener('change', renderReport);
+                }
+                document.getElementById('settings-report').addEventListener('toggle', (e) => {
+                    if (e.target.open) renderReport();
+                });
+                document.getElementById('btn-copy-report').addEventListener('click', copyReport);
+
+                document.getElementById('settings-interval-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    getActiveProfile().intervalDays = document.getElementById('settings-interval').valueAsNumber;
+                    saveState();
+                    renderAll();
+                    showSnackbar('Intervalo salvo!');
+                });
+
+                document.getElementById('settings-brand-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const input = document.getElementById('settings-brand');
+                    const brand = input.value.trim();
+                    const profile = getActiveProfile();
+                    if (!brand) return showSnackbar('Digite o nome da marca.');
+                    if (['Mounjaro', ...profile.brands].some((name) => name.toLowerCase() === brand.toLowerCase())) {
+                        return showSnackbar('Essa marca já está disponível.');
+                    }
+                    profile.brands.push(brand);
+                    input.value = '';
+                    saveState();
+                    renderSettingsModal();
+                    showSnackbar('Marca cadastrada!');
+                });
+
+                document.getElementById('settings-custom-dose-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const input = document.getElementById('settings-custom-dose');
+                    const unit = document.getElementById('settings-custom-dose-unit').value;
+                    const dose = parseCustomDose(input.value, unit);
+                    const profile = getActiveProfile();
+                    if (!dose) return showSnackbar('Digite um valor maior que zero.');
+                    if (PRESET_DOSES.includes(dose) || profile.customDoses.includes(dose)) {
+                        return showSnackbar('Essa dose já está disponível.');
+                    }
+                    profile.customDoses.push(dose);
+                    input.value = '';
+                    saveState();
+                    renderSettingsModal();
+                    showSnackbar('Dose adicionada!');
+                });
+
+                // Seletor de Perfis no Cabeçalho
+                document.getElementById('seg-profile-0').addEventListener('click', () => switchProfile(0));
+                document.getElementById('seg-profile-1').addEventListener('click', () => switchProfile(1));
+
+                // Navegação Inferior (3 Abas: Início, Agenda, Peso)
+                document.querySelectorAll('.nav-tab-btn').forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        switchTab(btn.getAttribute('data-tab'));
+                    });
+                });
+
+                // Configurações: Escala de Fonte
+                document.getElementById('font-size-options').addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-font-scale]');
+                    if (!btn) return;
+                    const scale = btn.getAttribute('data-font-scale');
+                    applyFontScale(scale);
+                    saveState();
+                    showSnackbar('Tamanho da fonte atualizado!');
+                });
+
+                // Configurações: Salvar Nome dos Perfis
+                document.querySelectorAll('[data-save-profile-name]').forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        const idx = Number(btn.getAttribute('data-save-profile-name'));
+                        const input = document.getElementById(`settings-name-${idx}`);
+                        const newName = (input.value || '').trim();
+                        if (!newName) {
+                            showSnackbar('Digite um nome válido.');
+                            return;
+                        }
+                        appState.profiles[idx].name = newName;
+                        saveState();
+                        updateProfileUI();
+                        renderAll();
+                        showSnackbar(`Nome "${newName}" salvo!`);
+                    });
+                });
+
+                // Configurações: Seleção de Cor Pré-Pronta por Perfil
+                document.addEventListener('click', (e) => {
+                    const swatchBtn = e.target.closest('[data-set-theme-profile]');
+                    if (!swatchBtn) return;
+                    const idx = Number(swatchBtn.getAttribute('data-set-theme-profile'));
+                    const key = swatchBtn.getAttribute('data-theme-key');
+                    appState.profiles[idx].themeKey = key;
+                    saveState();
+                    applyActiveThemeColors();
+                    updateProfileUI();
+                    renderSettingsModal();
+                    showSnackbar(`Cor aplicada ao ${appState.profiles[idx].name}!`);
+                });
+
+                // Configurações: Cor Customizada Livre por Perfil
+                document.addEventListener('input', (e) => {
+                    const colorInput = e.target.closest('[data-custom-color-profile]');
+                    if (!colorInput) return;
+                    const idx = Number(colorInput.getAttribute('data-custom-color-profile'));
+                    appState.profiles[idx].themeKey = 'custom';
+                    appState.profiles[idx].customHex = colorInput.value;
+                    saveState();
+                    applyActiveThemeColors();
+                    updateProfileUI();
+                });
+
+                document.addEventListener('change', (e) => {
+                    if (e.target.matches('[data-custom-color-profile]')) {
+                        renderSettingsModal();
+                        showSnackbar('Cor personalizada salva!');
+                    }
+                });
+
+                // Atalhos da Aba Início e Peso
+                document.getElementById('fab-quick-add').addEventListener('click', () => openEntryModal('dose'));
+                document.getElementById('btn-hero-add').addEventListener('click', () => openEntryModal('dose'));
+                document.getElementById('btn-empty-add').addEventListener('click', () => openEntryModal('dose'));
+                document.getElementById('btn-weight-open-modal').addEventListener('click', () => openEntryModal('weight'));
+                document.getElementById('card-goto-weight').addEventListener('click', () => switchTab('weight'));
+                document.getElementById('btn-see-calendar').addEventListener('click', () => switchTab('calendar'));
+
+                // Controles do Calendário
+                document.getElementById('btn-prev-month').addEventListener('click', () => {
+                    calendarMonthDate.setMonth(calendarMonthDate.getMonth() - 1);
+                    renderCalendar();
+                });
+                document.getElementById('btn-next-month').addEventListener('click', () => {
+                    calendarMonthDate.setMonth(calendarMonthDate.getMonth() + 1);
+                    renderCalendar();
+                });
+                document.getElementById('btn-today-month').addEventListener('click', () => {
+                    calendarMonthDate = new Date();
+                    selectedDateISO = getTodayISO();
+                    renderCalendar();
+                });
+                document.getElementById('btn-cal-add-dose').addEventListener('click', () => openEntryModal('dose', selectedDateISO));
+                document.getElementById('btn-cal-add-weight').addEventListener('click', () => openEntryModal('weight', selectedDateISO));
+
+                document.getElementById('cal-days-grid').addEventListener('click', (e) => {
+                    const dayBtn = e.target.closest('[data-cal-iso]');
+                    if (!dayBtn) return;
+                    selectedDateISO = dayBtn.getAttribute('data-cal-iso');
+                    renderCalendar();
+                });
+
+                // Alternador do Bottom Sheet (Nova Dose / Novo Peso)
+                document.getElementById('sheet-mode-dose').addEventListener('click', () => setEntrySheetMode('dose'));
+                document.getElementById('sheet-mode-weight').addEventListener('click', () => setEntrySheetMode('weight'));
+
+                // Chips de Dose e Local
+                document.getElementById('dose-chips-group').addEventListener('click', (e) => {
+                    const chip = e.target.closest('[data-dose-val]');
+                    if (chip) selectDoseChip(chip.getAttribute('data-dose-val'));
+                });
+                document.getElementById('site-chips-group').addEventListener('click', (e) => {
+                    const chip = e.target.closest('[data-site-val]');
+                    if (chip) selectSiteChip(chip.getAttribute('data-site-val'));
+                });
+
+                // Expansível "+ Mais detalhes"
+                document.getElementById('btn-toggle-extra').addEventListener('click', () => {
+                    const box = document.getElementById('dose-extra-box');
+                    const hidden = box.classList.toggle('hidden');
+                    document.getElementById('extra-toggle-symbol').textContent = hidden ? '+' : '−';
+                });
+
+                document.getElementById('select-dose-brand').addEventListener('change', (e) => {
+                    const input = document.getElementById('input-dose-brand');
+                    const useOther = e.target.value === '';
+                    input.classList.toggle('hidden', !useOther);
+                    input.required = useOther;
+                    if (useOther) input.focus();
+                });
+
+                // Submit: Nova Dose
+                document.getElementById('form-dose').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const date = document.getElementById('input-dose-date').value;
+                    const dose = document.getElementById('input-dose-val').value;
+                    const site = document.getElementById('input-dose-site').value;
+                    const brand = document.getElementById('select-dose-brand').value ||
+                        document.getElementById('input-dose-brand').value.trim();
+                    const quantity = document.getElementById('input-dose-qty').value.trim();
+                    const notes = document.getElementById('input-dose-notes').value.trim();
+
+                    if (!date) return;
+                    if (!dose) return showSnackbar('Selecione a dose aplicada.');
+                    if (!brand) return showSnackbar('Digite o nome da marca.');
+
+                    getActiveProfile().doses.push({
+                        id: 'd_' + Date.now(),
+                        date,
+                        dose,
+                        brand,
+                        quantity,
+                        site,
+                        notes
+                    });
+
+                    saveState();
+                    closeModal('modal-entry');
+                    renderAll();
+                    showSnackbar('Dose registrada!');
+                });
+
+                // Submit: Novo Peso
+                document.getElementById('form-weight').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const date = document.getElementById('input-weight-date').value;
+                    const rawKg = document.getElementById('input-weight-kg').value.replace(',', '.').trim();
+                    const weight = parseFloat(rawKg);
+
+                    if (!date || isNaN(weight) || weight < 20 || weight > 450) {
+                        showSnackbar('Informe um peso válido.');
+                        return;
+                    }
+
+                    getActiveProfile().weights.push({
+                        id: 'w_' + Date.now(),
+                        date,
+                        weight: Math.round(weight * 10) / 10
+                    });
+
+                    saveState();
+                    closeModal('modal-entry');
+                    renderAll();
+                    showSnackbar('Peso registrado!');
+                });
+
+                // Delegação global para excluir dose/peso
+                document.addEventListener('click', (e) => {
+                    const delBtn = e.target.closest('[data-delete-kind]');
+                    if (!delBtn) return;
+                    const kind = delBtn.getAttribute('data-delete-kind');
+                    const id = delBtn.getAttribute('data-delete-id');
+
+                    if (kind === 'dose') {
+                        openConfirm('Excluir dose?', 'Esta aplicação será removida do histórico.', () => {
+                            const profile = getActiveProfile();
+                            profile.doses = profile.doses.filter((d) => d.id !== id);
+                            saveState();
+                            renderAll();
+                            showSnackbar('Dose excluída.');
+                        });
+                    } else if (kind === 'weight') {
+                        openConfirm('Excluir pesagem?', 'Este registro de peso será removido.', () => {
+                            const profile = getActiveProfile();
+                            profile.weights = profile.weights.filter((w) => w.id !== id);
+                            saveState();
+                            renderAll();
+                            showSnackbar('Pesagem excluída.');
+                        });
+                    }
+                });
+
+                // Botão Confirmar no Modal
+                document.getElementById('btn-confirm-yes').addEventListener('click', () => {
+                    if (typeof pendingConfirmAction === 'function') {
+                        pendingConfirmAction();
+                        pendingConfirmAction = null;
+                    }
+                    closeModal('modal-confirm');
+                });
+
+                // Fechar modais ao clicar no botão X ou no fundo escuro
+                document.querySelectorAll('[data-close-modal]').forEach((btn) => {
+                    btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close-modal')));
+                });
+
+                ['modal-entry', 'modal-settings', 'modal-confirm'].forEach((modalId) => {
+                    const overlay = document.getElementById(modalId);
+                    overlay.addEventListener('click', (e) => {
+                        if (e.target === overlay) closeModal(modalId);
+                    });
+                });
+
+                document.getElementById('btn-retry-cloud').addEventListener('click', () => {
+                    if (cloud) void flushCloud();
+                    else void connectCloud();
+                });
+                window.addEventListener('online', () => {
+                    if (!cloud) void connectCloud();
+                    else if (pendingCloud) void flushCloud();
+                    else setCloudStatus('Nuvem conectada.');
+                });
+                window.addEventListener('offline', () => {
+                    setCloudStatus('Sem internet. As alterações ficam neste aparelho por enquanto.');
+                });
+                void connectCloud();
+
+                document.getElementById('btn-reset-all').addEventListener('click', () => {
+                    openConfirm('Apagar tudo?', 'Todos os registros dos 2 perfis serão apagados deste aparelho e da nuvem.', () => {
+                        appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                        saveState('delete');
+                        applyFontScale('normal');
+                        applyActiveThemeColors();
+                        updateProfileUI();
+                        renderSettingsModal();
+                        renderAll();
+                        closeModal('modal-settings');
+                        showSnackbar('Dados apagados neste aparelho.');
+                    });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
