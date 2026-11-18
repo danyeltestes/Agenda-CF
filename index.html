@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>AGENDA CF • ACF.18.11#5</title>
+    <title>AGENDA CF • ACF.18.11#6</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -184,16 +184,10 @@
                 
                 <!-- Card Hero: Próxima Dose -->
                 <div class="rounded-[28px] m3-primary-container p-6 relative overflow-hidden">
-                    <div class="flex items-start justify-between gap-3 adaptive-stack">
-                        <div class="min-w-0">
-                            <span class="text-xs font-bold uppercase tracking-wider opacity-75">Próxima dose</span>
-                            <h2 id="home-countdown" class="font-display text-3xl font-extrabold tracking-tight mt-1 leading-tight">Sem registros</h2>
-                            <p id="home-next-date" class="text-sm font-semibold opacity-85 mt-1">Toque no + para anotar</p>
-                        </div>
-
-                        <button type="button" id="btn-hero-add" class="w-12 h-12 rounded-[18px] m3-primary flex items-center justify-center shrink-0 spring-btn shadow-xs" title="Registrar Dose">
-                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        </button>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider opacity-75">Próxima dose</span>
+                        <h2 id="home-countdown" class="font-display text-3xl font-extrabold tracking-tight mt-1 leading-tight">Sem registros</h2>
+                        <p id="home-next-date" class="text-sm font-semibold opacity-85 mt-1">Toque no + do menu inferior para registrar</p>
                     </div>
 
                     <!-- Pílula Única de Sugestão de Rodízio -->
@@ -226,11 +220,6 @@
                 <!-- Estado Vazio Discreto -->
                 <div id="home-empty-card" class="hidden rounded-[24px] m3-surface-low p-6 text-center space-y-3">
                     <p class="text-sm font-medium m3-text-var">Nenhum registro ainda para <strong class="active-profile-label">Pessoa 1</strong>.</p>
-                    <div class="flex flex-wrap gap-2.5 justify-center pt-1">
-                        <button type="button" id="btn-empty-add" class="min-h-[2.6rem] px-5 py-2 rounded-full m3-primary font-display text-xs font-bold spring-btn">
-                            + Nova Dose
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Lista Limpa: 3 Registros Mais Recentes -->
@@ -356,7 +345,8 @@
             <div class="w-9 h-1 rounded-full mx-auto mb-4 opacity-30" style="background-color: var(--on-surface-var);"></div>
 
             <div class="flex items-center justify-between gap-2 mb-4">
-                <div class="p-1 rounded-full m3-surface grid grid-cols-2 gap-1 flex-1">
+                <h3 id="entry-edit-title" class="hidden font-display text-lg font-extrabold"></h3>
+                <div id="entry-mode-options" class="p-1 rounded-full m3-surface grid grid-cols-2 gap-1 flex-1">
                     <button type="button" id="sheet-mode-dose" class="min-h-[2.35rem] py-1 px-2 rounded-full m3-secondary-container text-xs font-bold transition-all">Nova Dose</button>
                     <button type="button" id="sheet-mode-weight" class="min-h-[2.35rem] py-1 px-2 rounded-full m3-text-var text-xs font-semibold transition-all">Novo Peso</button>
                 </div>
@@ -422,7 +412,7 @@
                 </div>
 
                 <button type="submit" class="w-full min-h-[3rem] py-3 rounded-full m3-primary font-display font-bold text-sm flex items-center justify-center gap-2 spring-btn">
-                    <span>Salvar Dose</span>
+                    <span id="save-dose-label">Salvar Dose</span>
                 </button>
             </form>
 
@@ -439,13 +429,13 @@
                 </div>
 
                 <button type="submit" class="w-full min-h-[3rem] py-3 rounded-full m3-primary font-display font-bold text-sm flex items-center justify-center gap-2 spring-btn">
-                    <span>Salvar Peso</span>
+                    <span id="save-weight-label">Salvar Peso</span>
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- ================= BOTTOM SHEET: CONFIGURAÇÕES (ACF.18.11#5) ================= -->
+    <!-- ================= BOTTOM SHEET: CONFIGURAÇÕES (ACF.18.11#6) ================= -->
     <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end sm:items-center justify-center">
         <div class="w-full max-w-md rounded-t-[32px] sm:rounded-[32px] m3-surface-low p-6 pt-3 shadow-2xl animate-sheet space-y-5 max-h-[90vh] overflow-y-auto">
             <div class="w-9 h-1 rounded-full mx-auto opacity-30" style="background-color: var(--on-surface-var);"></div>
@@ -453,7 +443,7 @@
             <div class="flex items-center justify-between gap-2">
                 <div>
                     <h3 class="font-display text-lg font-extrabold leading-tight">Configurações</h3>
-                    <span class="text-[11px] font-bold m3-primary-text">AGENDA CF • ACF.18.11#5</span>
+                    <span class="text-[11px] font-bold m3-primary-text">AGENDA CF • ACF.18.11#6</span>
                 </div>
                 <button type="button" data-close-modal="modal-settings" class="w-9 h-9 rounded-full m3-surface flex items-center justify-center shrink-0 spring-btn">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -608,7 +598,6 @@
                 <h4 id="settings-data-title" class="text-xs font-bold uppercase tracking-wider m3-text-var px-1">Dados e sincronização</h4>
                 <div class="rounded-[18px] m3-surface p-3 space-y-2">
                     <p class="text-xs m3-text-var">Quem abrir o site pode ver e alterar os dois perfis.</p>
-                    <button type="button" id="btn-migrate-shared" class="hidden w-full rounded-[16px] m3-secondary-container px-3 py-2.5 text-sm font-bold spring-btn">Trazer registros da versão anterior</button>
                     <p id="cloud-status" class="text-sm font-bold" role="status">Preparando sincronização…</p>
                     <button type="button" id="btn-retry-cloud" class="hidden rounded-full m3-secondary-container px-3 py-2 text-xs font-bold spring-btn">
                         Tentar novamente
@@ -626,14 +615,12 @@
                     <p>18/11 · Agora dá pra vcs salvar marcas e doses e mudar o intervalo da próxima aplicação.</p>
                     <p>Se acharem algum bug, me avisa kkkkk</p>
                     <p>Deixando anotado aqui pra eu lembrar depois: adicionar uns modelos personalizados.</p>
-                    <p>18/11 · Coloquei um relatório pra copiar em texto nas configurações.</p>
-                    <p>18/11 · Os dois celulares agora veem os mesmos perfis e registros ao abrir o endereço normal do site.</p>
                 </div>
             </details>
 
             <!-- Rodapé da versão -->
             <div class="text-center pt-1 pb-1">
-                <p class="text-[11px] font-bold m3-text-var">AGENDA CF • Versão ACF.18.11#5</p>
+                <p class="text-[11px] font-bold m3-text-var">AGENDA CF • Versão ACF.18.11#6</p>
             </div>
         </div>
     </div>
@@ -666,11 +653,10 @@
             // =====================================================================
             // CONSTANTES, PALETAS DE CORES & ESTADO ESTRUTURADO (PRONTO P/ FIREBASE)
             // =====================================================================
-            const APP_VERSION = 'ACF.18.11#5';
+            const APP_VERSION = 'ACF.18.11#6';
             const STORAGE_KEY = 'agenda_cf_state_v1';
             const SHARED_AGENDA_ID = 'principal';
             const CACHE_KEY = `${STORAGE_KEY}:shared:${SHARED_AGENDA_ID}`;
-            const LEGACY_KEY = 'mounjaro_tracker_v1';
             const THEME_KEY = 'agenda_cf_theme';
 
             // 6 Paletas Material 3 Expressive pré-prontas (Modo Claro e Escuro)
@@ -831,6 +817,7 @@
             let calendarMonthDate = new Date();
             let selectedDateISO = getTodayISO();
             let pendingConfirmAction = null;
+            let editingRecord = null;
 
             // =====================================================================
             // PERSISTÊNCIA & MIGRAÇÃO SEGURA (LOCALSTORAGE -> FUTURO FIREBASE)
@@ -931,6 +918,10 @@
                 document.getElementById('btn-retry-cloud').classList.toggle('hidden', !retry);
             }
 
+            function recordChanges(before, after) {
+                return Object.fromEntries(Object.entries(after).filter(([key, value]) => value !== before[key]));
+            }
+
             function mergeSharedState(base, local, remote) {
                 const merged = cloneState(remote);
                 merged.version = APP_VERSION;
@@ -942,15 +933,19 @@
                     }
                     for (const key of ['doses', 'weights', 'brands', 'customDoses']) {
                         const getKey = (value) => typeof value === 'string' ? value : value.id;
-                        const beforeKeys = new Set(before[key].map(getKey));
+                        const beforeEntries = new Map(before[key].map((value) => [getKey(value), value]));
                         const afterKeys = new Set(after[key].map(getKey));
                         const entries = new Map(profile[key].map((value) => [getKey(value), value]));
-                        for (const id of beforeKeys) {
+                        for (const id of beforeEntries.keys()) {
                             if (!afterKeys.has(id)) entries.delete(id);
                         }
                         for (const value of after[key]) {
                             const id = getKey(value);
-                            if (!beforeKeys.has(id)) entries.set(id, value);
+                            if (!beforeEntries.has(id)) {
+                                entries.set(id, value);
+                            } else if (typeof value !== 'string' && entries.has(id)) {
+                                entries.set(id, { ...entries.get(id), ...recordChanges(beforeEntries.get(id), value) });
+                            }
                         }
                         profile[key] = [...entries.values()];
                     }
@@ -1035,7 +1030,6 @@
                             return;
                         }
                         acceptRemote(snapshot.data());
-                        document.getElementById('btn-migrate-shared').classList.remove('hidden');
                         if (pendingCloud) void flushCloud();
                         else setCloudStatus('Agenda compartilhada atualizada.');
                     }, (error) => {
@@ -1101,53 +1095,6 @@
                     setCloudStatus('Alterações salvas neste aparelho. Falta atualizar a agenda compartilhada.', true);
                 } finally {
                     writingCloud = false;
-                }
-            }
-
-            async function previousRecords(firebase) {
-                const local = readLocal(STORAGE_KEY) || readLocal(LEGACY_KEY);
-                if (isAgendaState(local)) {
-                    delete local.pendingCloud;
-                    return normalizeState(local);
-                }
-
-                const { firestore, db, user } = firebase;
-                const ref = firestore.doc(db, 'users', user.uid, 'agenda', 'state');
-                const previous = await firestore.getDocFromServer(ref);
-                return isAgendaState(previous.data()) ? normalizeState(previous.data()) : null;
-            }
-
-            async function migrateSharedRecords() {
-                if (!cloud || !latestRemote) return;
-                const button = document.getElementById('btn-migrate-shared');
-                button.disabled = true;
-                try {
-                    const previous = await previousRecords(cloud);
-                    let added = 0;
-                    previous?.profiles.forEach((source, index) => {
-                        const target = appState.profiles[index];
-                        for (const kind of ['doses', 'weights']) {
-                            const known = new Set(target[kind].map((record) => record.id));
-                            for (const record of source[kind]) {
-                                if (known.has(record.id)) continue;
-                                known.add(record.id);
-                                target[kind].push(record);
-                                added++;
-                            }
-                        }
-                    });
-                    if (added) {
-                        saveState();
-                        renderAll();
-                        showSnackbar(`${added} registro(s) trazido(s) deste aparelho.`);
-                    } else {
-                        showSnackbar('Nenhum registro novo neste aparelho.');
-                    }
-                } catch (error) {
-                    console.error('Erro ao trazer registros anteriores:', error);
-                    showSnackbar('Não foi possível trazer os registros anteriores.');
-                } finally {
-                    button.disabled = false;
                 }
             }
 
@@ -1408,6 +1355,24 @@
             // =====================================================================
             // RENDERIZAÇÃO: ABA 1 - INÍCIO
             // =====================================================================
+            function renderRecordActions(kind, id) {
+                const label = kind === 'dose' ? 'dose' : 'pesagem';
+                return `
+                    <div class="flex shrink-0 items-center gap-0.5">
+                        <button type="button" data-edit-kind="${kind}" data-edit-id="${escapeHTML(id)}"
+                            class="w-9 h-9 rounded-full hover:bg-black/10 flex items-center justify-center spring-btn"
+                            title="Editar ${label}" aria-label="Editar ${label}">
+                            <svg aria-hidden="true" class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5 4 4M4 20l4.5-1 11-11a2.8 2.8 0 0 0-4-4l-11 11L4 20z"/></svg>
+                        </button>
+                        <button type="button" data-delete-kind="${kind}" data-delete-id="${escapeHTML(id)}"
+                            class="w-9 h-9 rounded-full hover:bg-rose-500/10 text-rose-500 flex items-center justify-center spring-btn"
+                            title="Excluir ${label}" aria-label="Excluir ${label}">
+                            <svg aria-hidden="true" class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        </button>
+                    </div>
+                `;
+            }
+
             function renderHome() {
                 const profile = getActiveProfile();
                 const doses = [...profile.doses].sort((a, b) => b.date.localeCompare(a.date));
@@ -1459,7 +1424,7 @@
                     document.getElementById('home-rotation-text').textContent = `Sugestão: ${getNextSuggestedSite(latest.site)}`;
                 } else {
                     document.getElementById('home-countdown').textContent = 'Sem registros';
-                    document.getElementById('home-next-date').textContent = 'Toque no + para anotar';
+                    document.getElementById('home-next-date').textContent = 'Toque no + do menu inferior para registrar';
                     document.getElementById('home-current-dose').textContent = '—';
                     rotationPill.classList.add('hidden');
                 }
@@ -1484,7 +1449,9 @@
                         id: d.id,
                         date: d.date,
                         title: `${d.dose} • ${d.site}`,
-                        sub: `${formatBR(d.date)}${d.brand ? ` • ${d.brand}` : ''}`
+                        sub: `${formatBR(d.date)}${d.brand ? ` • ${d.brand}` : ''}`,
+                        quantity: d.quantity,
+                        notes: d.notes
                     })),
                     ...weights.map((w) => ({
                         kind: 'weight',
@@ -1507,12 +1474,12 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="font-display text-sm font-bold leading-snug">${escapeHTML(item.title)}</p>
-                                <p class="text-xs m3-text-var leading-snug">${escapeHTML(item.sub)}</p>
+                                <p class="text-xs m3-text-var leading-snug break-words">${escapeHTML(item.sub)}</p>
+                                ${item.quantity ? `<p class="text-xs m3-text-var mt-1 break-words">Embalagem / quantidade: ${escapeHTML(item.quantity)}</p>` : ''}
+                                ${item.notes ? `<p class="text-xs m3-text-var mt-1 break-words">Observações: ${escapeHTML(item.notes)}</p>` : ''}
                             </div>
                         </div>
-                        <button type="button" data-delete-kind="${item.kind}" data-delete-id="${escapeHTML(item.id)}" class="w-8 h-8 rounded-full hover:bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0 spring-btn opacity-75 hover:opacity-100" title="Excluir">
-                            <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                        </button>
+                        ${renderRecordActions(item.kind, item.id)}
                     </div>
                 `).join('');
             }
@@ -1628,9 +1595,7 @@
                                 <p class="font-display font-bold">${escapeHTML(d.dose)} • ${escapeHTML(d.site)}</p>
                                 <p class="opacity-80 mt-0.5">${escapeHTML(d.brand || 'Mounjaro')}${d.quantity ? ` • ${escapeHTML(d.quantity)}` : ''}${d.notes ? ` • "${escapeHTML(d.notes)}"` : ''}</p>
                             </div>
-                            <button type="button" data-delete-kind="dose" data-delete-id="${escapeHTML(d.id)}" class="w-8 h-8 rounded-full hover:bg-black/10 flex items-center justify-center shrink-0" title="Excluir">
-                                <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
+                            ${renderRecordActions('dose', d.id)}
                         </div>
                     `);
                 });
@@ -1639,9 +1604,7 @@
                     rows.push(`
                         <div class="p-3.5 rounded-[16px] m3-tertiary-container flex items-center justify-between gap-2">
                             <span class="font-display text-xs font-bold">Peso: ${formatKg(w.weight)} kg</span>
-                            <button type="button" data-delete-kind="weight" data-delete-id="${escapeHTML(w.id)}" class="w-8 h-8 rounded-full hover:bg-black/10 flex items-center justify-center shrink-0" title="Excluir">
-                                <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            </button>
+                            ${renderRecordActions('weight', w.id)}
                         </div>
                     `);
                 });
@@ -1706,9 +1669,7 @@
                             <div class="flex items-center gap-2">
                                 <span class="font-display text-sm font-extrabold">${formatKg(item.weight)} kg</span>
                                 ${deltaBadge}
-                                <button type="button" data-delete-kind="weight" data-delete-id="${escapeHTML(item.id)}" class="w-8 h-8 rounded-full hover:bg-rose-500/10 text-rose-500 flex items-center justify-center spring-btn opacity-75 hover:opacity-100" title="Excluir">
-                                    <svg class="w-4 h-4 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                </button>
+                                ${renderRecordActions('weight', item.id)}
                             </div>
                         </div>
                     `;
@@ -1783,7 +1744,7 @@
             }
 
             // =====================================================================
-            // RENDERIZAÇÃO: MODAL DE CONFIGURAÇÕES (ACF.18.11#5)
+            // RENDERIZAÇÃO: MODAL DE CONFIGURAÇÕES (ACF.18.11#6)
             // =====================================================================
             function buildReport(profile, start, end) {
                 const inPeriod = (record) => record.date >= start && record.date <= end;
@@ -1935,12 +1896,20 @@
             // =====================================================================
             // BOTTOM SHEETS & FORMULÁRIOS
             // =====================================================================
-            function openEntryModal(mode = 'dose', prefillDate = null) {
-                const targetDate = prefillDate || (activeTab === 'calendar' ? selectedDateISO : getTodayISO());
+            function openEntryModal(mode = 'dose', prefillDate = null, record = null) {
+                editingRecord = record ? { kind: mode, profileIndex: appState.activeProfile, original: { ...record } } : null;
+                const editTitle = document.getElementById('entry-edit-title');
+                editTitle.textContent = mode === 'dose' ? 'Editar dose' : 'Editar pesagem';
+                editTitle.classList.toggle('hidden', !record);
+                document.getElementById('entry-mode-options').classList.toggle('hidden', Boolean(record));
+                document.getElementById('save-dose-label').textContent = record ? 'Salvar alterações' : 'Salvar Dose';
+                document.getElementById('save-weight-label').textContent = record ? 'Salvar alterações' : 'Salvar Peso';
+                const targetDate = record?.date || prefillDate || (activeTab === 'calendar' ? selectedDateISO : getTodayISO());
                 const profile = getActiveProfile();
 
                 const latest = [...profile.doses].sort((a, b) => b.date.localeCompare(a.date))[0];
                 const doseChoices = new Set([...PRESET_DOSES, ...profile.customDoses.filter((dose) => !dose.endsWith(' mg'))]);
+                if (record?.dose) doseChoices.add(record.dose);
                 const doseGroup = document.getElementById('dose-chips-group');
                 doseGroup.replaceChildren();
                 for (const dose of doseChoices) {
@@ -1951,7 +1920,7 @@
                     chip.textContent = dose;
                     doseGroup.append(chip);
                 }
-                const brandChoices = new Map(['Mounjaro', ...profile.brands, latest?.brand]
+                const brandChoices = new Map(['Mounjaro', ...profile.brands, latest?.brand, record?.brand]
                     .filter(Boolean).map((brand) => [brand.toLowerCase(), brand]));
                 const brandOptions = document.getElementById('select-dose-brand');
                 brandOptions.replaceChildren();
@@ -1966,23 +1935,34 @@
                 otherBrand.value = '';
                 otherBrand.textContent = 'Outra marca…';
                 brandOptions.append(otherBrand);
-                brandOptions.value = brandChoices.get((latest?.brand || profile.brands[0] || 'Mounjaro').toLowerCase());
+                const missingBrand = mode === 'dose' && record && !record.brand;
+                if (missingBrand) {
+                    const unspecified = document.createElement('option');
+                    unspecified.value = '';
+                    unspecified.dataset.unspecified = '';
+                    unspecified.textContent = 'Marca não registrada';
+                    brandOptions.insertBefore(unspecified, brandOptions.firstChild);
+                }
+                brandOptions.value = missingBrand ? '' :
+                    brandChoices.get((record?.brand || latest?.brand || profile.brands[0] || 'Mounjaro').toLowerCase());
 
                 document.getElementById('input-dose-date').value = targetDate;
-                document.getElementById('dose-extra-box').classList.add('hidden');
-                document.getElementById('extra-toggle-symbol').textContent = '+';
-                document.getElementById('input-dose-notes').value = '';
+                const showDetails = Boolean(record?.quantity || record?.notes);
+                document.getElementById('dose-extra-box').classList.toggle('hidden', !showDetails);
+                document.getElementById('extra-toggle-symbol').textContent = showDetails ? '−' : '+';
+                document.getElementById('input-dose-notes').value = record?.notes || '';
 
-                selectDoseChip('');
-                selectSiteChip(latest ? getNextSuggestedSite(latest.site) : ROTATION_SITES[0]);
+                selectDoseChip(record?.dose || '');
+                selectSiteChip(mode === 'dose' && record ? record.site || '' :
+                    latest ? getNextSuggestedSite(latest.site) : ROTATION_SITES[0]);
                 const brandInput = document.getElementById('input-dose-brand');
                 brandInput.value = '';
                 brandInput.required = false;
                 brandInput.classList.add('hidden');
-                document.getElementById('input-dose-qty').value = '';
+                document.getElementById('input-dose-qty').value = record?.quantity || '';
 
                 document.getElementById('input-weight-date').value = targetDate;
-                document.getElementById('input-weight-kg').value = '';
+                document.getElementById('input-weight-kg').value = mode === 'weight' && record ? formatKg(record.weight) : '';
 
                 setEntrySheetMode(mode);
                 document.getElementById('modal-entry').classList.remove('hidden');
@@ -1992,7 +1972,35 @@
                 }
             }
 
+            function saveEntry(kind, fields) {
+                const edit = editingRecord;
+                const list = (edit ? appState.profiles[edit.profileIndex] : getActiveProfile())[kind === 'dose' ? 'doses' : 'weights'];
+                if (edit) {
+                    const index = list.findIndex((record) => record.id === edit.original.id);
+                    if (index < 0) {
+                        closeModal('modal-entry');
+                        showSnackbar('Este registro já foi excluído.');
+                        return;
+                    }
+                    list[index] = { ...list[index], ...recordChanges(edit.original, fields) };
+                    if (activeTab === 'calendar' && fields.date !== edit.original.date) {
+                        selectedDateISO = fields.date;
+                        calendarMonthDate = parseLocalISO(fields.date);
+                        calendarMonthDate.setDate(1);
+                    }
+                } else {
+                    const prefix = kind === 'dose' ? 'd_' : 'w_';
+                    list.push({ id: prefix + (crypto.randomUUID?.() ?? Date.now()), ...fields });
+                }
+
+                saveState();
+                closeModal('modal-entry');
+                renderAll();
+                showSnackbar(edit ? 'Alterações salvas!' : kind === 'dose' ? 'Dose registrada!' : 'Peso registrado!');
+            }
+
             function setEntrySheetMode(mode) {
+                if (editingRecord && editingRecord.kind !== mode) return;
                 const isDose = mode === 'dose';
                 const btnDose = document.getElementById('sheet-mode-dose');
                 const btnWeight = document.getElementById('sheet-mode-weight');
@@ -2036,6 +2044,7 @@
             function closeModal(id) {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
+                if (id === 'modal-entry') editingRecord = null;
             }
 
             function openConfirm(title, msg, onConfirm) {
@@ -2194,8 +2203,6 @@
 
                 // Atalhos da Aba Início e Peso
                 document.getElementById('fab-quick-add').addEventListener('click', () => openEntryModal('dose'));
-                document.getElementById('btn-hero-add').addEventListener('click', () => openEntryModal('dose'));
-                document.getElementById('btn-empty-add').addEventListener('click', () => openEntryModal('dose'));
                 document.getElementById('btn-weight-open-modal').addEventListener('click', () => openEntryModal('weight'));
                 document.getElementById('card-goto-weight').addEventListener('click', () => switchTab('weight'));
                 document.getElementById('btn-see-calendar').addEventListener('click', () => switchTab('calendar'));
@@ -2247,7 +2254,7 @@
 
                 document.getElementById('select-dose-brand').addEventListener('change', (e) => {
                     const input = document.getElementById('input-dose-brand');
-                    const useOther = e.target.value === '';
+                    const useOther = e.target.value === '' && !('unspecified' in e.target.selectedOptions[0].dataset);
                     input.classList.toggle('hidden', !useOther);
                     input.required = useOther;
                     if (useOther) input.focus();
@@ -2259,29 +2266,18 @@
                     const date = document.getElementById('input-dose-date').value;
                     const dose = document.getElementById('input-dose-val').value;
                     const site = document.getElementById('input-dose-site').value;
-                    const brand = document.getElementById('select-dose-brand').value ||
-                        document.getElementById('input-dose-brand').value.trim();
+                    const brandSelect = document.getElementById('select-dose-brand');
+                    const brand = 'unspecified' in brandSelect.selectedOptions[0].dataset ? '' :
+                        brandSelect.value || document.getElementById('input-dose-brand').value.trim();
                     const quantity = document.getElementById('input-dose-qty').value.trim();
                     const notes = document.getElementById('input-dose-notes').value.trim();
 
                     if (!date) return;
                     if (!dose) return showSnackbar('Selecione a dose aplicada.');
-                    if (!brand) return showSnackbar('Digite o nome da marca.');
-
-                    getActiveProfile().doses.push({
-                        id: 'd_' + (crypto.randomUUID?.() ?? Date.now()),
-                        date,
-                        dose,
-                        brand,
-                        quantity,
-                        site,
-                        notes
-                    });
-
-                    saveState();
-                    closeModal('modal-entry');
-                    renderAll();
-                    showSnackbar('Dose registrada!');
+                    if (!brand && (!editingRecord || editingRecord.original.brand)) {
+                        return showSnackbar('Digite o nome da marca.');
+                    }
+                    saveEntry('dose', { date, dose, brand, quantity, site, notes });
                 });
 
                 // Submit: Novo Peso
@@ -2289,27 +2285,26 @@
                     e.preventDefault();
                     const date = document.getElementById('input-weight-date').value;
                     const rawKg = document.getElementById('input-weight-kg').value.replace(',', '.').trim();
-                    const weight = parseFloat(rawKg);
+                    const weight = Number(rawKg);
 
-                    if (!date || isNaN(weight) || weight < 20 || weight > 450) {
+                    if (!date || !/^\d+(?:\.\d+)?$/.test(rawKg) || !Number.isFinite(weight) || weight < 20 || weight > 450) {
                         showSnackbar('Informe um peso válido.');
                         return;
                     }
-
-                    getActiveProfile().weights.push({
-                        id: 'w_' + (crypto.randomUUID?.() ?? Date.now()),
-                        date,
-                        weight: Math.round(weight * 10) / 10
-                    });
-
-                    saveState();
-                    closeModal('modal-entry');
-                    renderAll();
-                    showSnackbar('Peso registrado!');
+                    saveEntry('weight', { date, weight: Math.round(weight * 10) / 10 });
                 });
 
-                // Delegação global para excluir dose/peso
+                // Ações de registros no Início, na Agenda e no Peso
                 document.addEventListener('click', (e) => {
+                    const editBtn = e.target.closest('[data-edit-kind]');
+                    if (editBtn) {
+                        const { editKind, editId } = editBtn.dataset;
+                        const profile = getActiveProfile();
+                        const records = editKind === 'dose' ? profile.doses : profile.weights;
+                        const record = records.find((item) => item.id === editId);
+                        if (record) openEntryModal(editKind, null, record);
+                        return;
+                    }
                     const delBtn = e.target.closest('[data-delete-kind]');
                     if (!delBtn) return;
                     const kind = delBtn.getAttribute('data-delete-kind');
@@ -2355,11 +2350,6 @@
                     });
                 });
 
-                document.getElementById('btn-migrate-shared').addEventListener('click', () => {
-                    openConfirm('Trazer registros anteriores?', 'As doses e pesagens importadas poderão ser vistas por quem abrir o site.', () => {
-                        void migrateSharedRecords();
-                    });
-                });
                 document.getElementById('btn-retry-cloud').addEventListener('click', () => {
                     if (cloud) void flushCloud();
                     else void connectCloud();
