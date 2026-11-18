@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>AGENDA CF • ACF.18.11#4</title>
+    <title>AGENDA CF • ACF.18.11#5</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -445,7 +445,7 @@
         </div>
     </div>
 
-    <!-- ================= BOTTOM SHEET: CONFIGURAÇÕES (ACF.18.11#4) ================= -->
+    <!-- ================= BOTTOM SHEET: CONFIGURAÇÕES (ACF.18.11#5) ================= -->
     <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-end sm:items-center justify-center">
         <div class="w-full max-w-md rounded-t-[32px] sm:rounded-[32px] m3-surface-low p-6 pt-3 shadow-2xl animate-sheet space-y-5 max-h-[90vh] overflow-y-auto">
             <div class="w-9 h-1 rounded-full mx-auto opacity-30" style="background-color: var(--on-surface-var);"></div>
@@ -453,7 +453,7 @@
             <div class="flex items-center justify-between gap-2">
                 <div>
                     <h3 class="font-display text-lg font-extrabold leading-tight">Configurações</h3>
-                    <span class="text-[11px] font-bold m3-primary-text">AGENDA CF • ACF.18.11#4</span>
+                    <span class="text-[11px] font-bold m3-primary-text">AGENDA CF • ACF.18.11#5</span>
                 </div>
                 <button type="button" data-close-modal="modal-settings" class="w-9 h-9 rounded-full m3-surface flex items-center justify-center shrink-0 spring-btn">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -607,6 +607,8 @@
             <section class="space-y-2.5 pt-1" aria-labelledby="settings-data-title">
                 <h4 id="settings-data-title" class="text-xs font-bold uppercase tracking-wider m3-text-var px-1">Dados e sincronização</h4>
                 <div class="rounded-[18px] m3-surface p-3 space-y-2">
+                    <p class="text-xs m3-text-var">Quem abrir o site pode ver e alterar os dois perfis.</p>
+                    <button type="button" id="btn-migrate-shared" class="hidden w-full rounded-[16px] m3-secondary-container px-3 py-2.5 text-sm font-bold spring-btn">Trazer registros da versão anterior</button>
                     <p id="cloud-status" class="text-sm font-bold" role="status">Preparando sincronização…</p>
                     <button type="button" id="btn-retry-cloud" class="hidden rounded-full m3-secondary-container px-3 py-2 text-xs font-bold spring-btn">
                         Tentar novamente
@@ -625,13 +627,13 @@
                     <p>Se acharem algum bug, me avisa kkkkk</p>
                     <p>Deixando anotado aqui pra eu lembrar depois: adicionar uns modelos personalizados.</p>
                     <p>18/11 · Coloquei um relatório pra copiar em texto nas configurações.</p>
-                    <p>18/11 · Agora os registros também são salvos na nuvem, sem pedir e-mail ou senha.</p>
+                    <p>18/11 · Os dois celulares agora veem os mesmos perfis e registros ao abrir o endereço normal do site.</p>
                 </div>
             </details>
 
             <!-- Rodapé da versão -->
             <div class="text-center pt-1 pb-1">
-                <p class="text-[11px] font-bold m3-text-var">AGENDA CF • Versão ACF.18.11#4</p>
+                <p class="text-[11px] font-bold m3-text-var">AGENDA CF • Versão ACF.18.11#5</p>
             </div>
         </div>
     </div>
@@ -664,8 +666,10 @@
             // =====================================================================
             // CONSTANTES, PALETAS DE CORES & ESTADO ESTRUTURADO (PRONTO P/ FIREBASE)
             // =====================================================================
-            const APP_VERSION = 'ACF.18.11#4';
+            const APP_VERSION = 'ACF.18.11#5';
             const STORAGE_KEY = 'agenda_cf_state_v1';
+            const SHARED_AGENDA_ID = 'principal';
+            const CACHE_KEY = `${STORAGE_KEY}:shared:${SHARED_AGENDA_ID}`;
             const LEGACY_KEY = 'mounjaro_tracker_v1';
             const THEME_KEY = 'agenda_cf_theme';
 
@@ -816,10 +820,13 @@
             };
 
             let pendingCloud = null;
+            let latestRemote = null;
+            let generation = null;
             let cloud = null;
             let connectingCloud = false;
             let writingCloud = false;
             let appState = loadState();
+            let lastSaved = cloneState(appState);
             let activeTab = 'home';
             let calendarMonthDate = new Date();
             let selectedDateISO = getTodayISO();
@@ -828,23 +835,30 @@
             // =====================================================================
             // PERSISTÊNCIA & MIGRAÇÃO SEGURA (LOCALSTORAGE -> FUTURO FIREBASE)
             // =====================================================================
-            function loadState() {
+            function cloneState(value) {
+                return JSON.parse(JSON.stringify(value));
+            }
+
+            function readLocal(key) {
                 try {
-                    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
-                    if (raw) {
-                        const parsed = JSON.parse(raw);
-                        if (parsed && Array.isArray(parsed.profiles) && parsed.profiles.length === 2) {
-                            if (['save', 'delete'].includes(parsed.pendingCloud)) {
-                                pendingCloud = { action: parsed.pendingCloud };
-                            }
-                            delete parsed.pendingCloud;
-                            return normalizeState(parsed);
-                        }
-                    }
-                } catch (err) {
-                    console.error('Erro ao ler estado:', err);
+                    return JSON.parse(localStorage.getItem(key));
+                } catch {
+                    return null;
                 }
-                return JSON.parse(JSON.stringify(DEFAULT_STATE));
+            }
+
+            function isAgendaState(state) {
+                return Array.isArray(state?.profiles) && state.profiles.length === 2;
+            }
+
+            function loadState() {
+                const saved = readLocal(CACHE_KEY);
+                if (isAgendaState(saved?.state)) {
+                    pendingCloud = saved.pending ?? null;
+                    generation = saved.generation ?? null;
+                    return normalizeState(saved.state);
+                }
+                return cloneState(DEFAULT_STATE);
             }
 
             function parseCustomDose(value, unit) {
@@ -893,20 +907,21 @@
 
             function persistLocalState() {
                 try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                        ...appState,
-                        pendingCloud: pendingCloud?.action ?? null
-                    }));
-                } catch (err) {
-                    showSnackbar('Erro ao salvar no dispositivo.');
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({ state: appState, pending: pendingCloud, generation }));
+                } catch {
+                    showSnackbar('Erro ao salvar neste aparelho.');
                 }
             }
 
             function saveState(action = 'save') {
                 appState.version = APP_VERSION;
-                if (action === 'delete') delete appState.updatedAt;
-                else appState.updatedAt = new Date().toISOString();
-                pendingCloud = { action };
+                appState.updatedAt = new Date().toISOString();
+                pendingCloud = {
+                    base: pendingCloud?.base ?? lastSaved,
+                    generation: pendingCloud ? pendingCloud.generation : generation,
+                    reset: action === 'delete' ? crypto.randomUUID() : pendingCloud?.reset ?? null
+                };
+                lastSaved = cloneState(appState);
                 persistLocalState();
                 void flushCloud();
             }
@@ -916,97 +931,223 @@
                 document.getElementById('btn-retry-cloud').classList.toggle('hidden', !retry);
             }
 
+            function mergeSharedState(base, local, remote) {
+                const merged = cloneState(remote);
+                merged.version = APP_VERSION;
+                for (const [index, profile] of merged.profiles.entries()) {
+                    const before = base.profiles[index];
+                    const after = local.profiles[index];
+                    for (const key of ['name', 'themeKey', 'customHex', 'intervalDays']) {
+                        if (before[key] !== after[key]) profile[key] = after[key];
+                    }
+                    for (const key of ['doses', 'weights', 'brands', 'customDoses']) {
+                        const getKey = (value) => typeof value === 'string' ? value : value.id;
+                        const beforeKeys = new Set(before[key].map(getKey));
+                        const afterKeys = new Set(after[key].map(getKey));
+                        const entries = new Map(profile[key].map((value) => [getKey(value), value]));
+                        for (const id of beforeKeys) {
+                            if (!afterKeys.has(id)) entries.delete(id);
+                        }
+                        for (const value of after[key]) {
+                            const id = getKey(value);
+                            if (!beforeKeys.has(id)) entries.set(id, value);
+                        }
+                        profile[key] = [...entries.values()];
+                    }
+                }
+                return merged;
+            }
+
+            async function getFirebase() {
+                const [firebase, authSDK, firestore] = await Promise.all([
+                    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
+                    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
+                    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
+                ]);
+                const app = firebase.getApps()[0] || firebase.initializeApp({
+                    apiKey: "AIzaSyBjVenoxkV4NO45jizP2cM_TPLH_M55pPQ",
+                    authDomain: "agendacf-87019.firebaseapp.com",
+                    projectId: "agendacf-87019",
+                    storageBucket: "agendacf-87019.firebasestorage.app",
+                    messagingSenderId: "1092563028524",
+                    appId: "1:1092563028524:web:705ec0b5548764d4475f89"
+                });
+                const auth = authSDK.getAuth(app);
+                await auth.authStateReady();
+                const user = auth.currentUser || (await authSDK.signInAnonymously(auth)).user;
+                const db = firestore.getFirestore(app);
+                return { firestore, db, user };
+            }
+
+            function refreshSharedState(state) {
+                const { activeProfile, fontScale } = appState;
+                appState = normalizeState(state);
+                appState.activeProfile = activeProfile;
+                appState.fontScale = fontScale;
+                lastSaved = cloneState(appState);
+                persistLocalState();
+                updateProfileUI();
+                applyActiveThemeColors();
+                renderAll();
+                if (!document.getElementById('modal-settings').classList.contains('hidden')) renderSettingsModal();
+            }
+
+            function acceptRemote(remote) {
+                if (latestRemote && remote.revision <= latestRemote.revision) return;
+                latestRemote = remote;
+                if (!pendingCloud) {
+                    generation = remote.generation;
+                    refreshSharedState(cloneState(remote.state));
+                    setCloudStatus('Agenda compartilhada atualizada.');
+                }
+            }
+
             async function connectCloud() {
-                if (connectingCloud || writingCloud) return;
-                if (!['https:', 'http:'].includes(location.protocol)) {
-                    setCloudStatus('Salvando neste aparelho. Abra o endereço publicado para usar a nuvem.');
+                if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+                    setCloudStatus('Abra o site publicado para acessar a agenda online.');
                     return;
                 }
                 if (!navigator.onLine) {
                     setCloudStatus('Sem internet. As alterações ficam neste aparelho por enquanto.');
                     return;
                 }
+                if (connectingCloud || cloud) return;
 
                 connectingCloud = true;
-                setCloudStatus('Conectando à nuvem…');
+                setCloudStatus('Conectando à agenda compartilhada…');
                 try {
-                    const [firebase, authSDK, firestore] = await Promise.all([
-                        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
-                        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
-                        import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js')
-                    ]);
-                    const app = firebase.getApps()[0] || firebase.initializeApp({
-                        apiKey: "AIzaSyBjVenoxkV4NO45jizP2cM_TPLH_M55pPQ",
-                        authDomain: "agendacf-87019.firebaseapp.com",
-                        projectId: "agendacf-87019",
-                        storageBucket: "agendacf-87019.firebasestorage.app",
-                        messagingSenderId: "1092563028524",
-                        appId: "1:1092563028524:web:705ec0b5548764d4475f89"
-                    });
-                    const auth = authSDK.getAuth(app);
-                    await auth.authStateReady();
-                    const user = auth.currentUser || (await authSDK.signInAnonymously(auth)).user;
-                    const db = firestore.getFirestore(app);
-                    const ref = firestore.doc(db, 'users', user.uid, 'agenda', 'state');
-                    const snapshot = await firestore.getDocFromServer(ref);
-
-                    if (!pendingCloud && snapshot.exists()) {
-                        const state = snapshot.data();
-                        if (!Array.isArray(state.profiles) || state.profiles.length !== 2) {
-                            throw new Error('Formato de dados inválido no Firestore.');
+                    const firebase = await getFirebase();
+                    const { firestore, db } = firebase;
+                    const ref = firestore.doc(db, 'sharedAgendas', SHARED_AGENDA_ID);
+                    await firestore.runTransaction(db, async (tx) => {
+                        const snapshot = await tx.get(ref);
+                        if (!snapshot.exists()) {
+                            tx.set(ref, { revision: 1, generation: crypto.randomUUID(), state: DEFAULT_STATE });
                         }
-                        appState = normalizeState(state);
-                        persistLocalState();
-                        applyFontScale(appState.fontScale);
-                        applyActiveThemeColors();
-                        updateProfileUI();
-                        renderAll();
-                        renderSettingsModal();
-                    } else if (!pendingCloud && !snapshot.exists() &&
-                        (appState.updatedAt || appState.profiles.some((p) => p.doses.length || p.weights.length))) {
-                        pendingCloud = { action: 'save' };
-                        persistLocalState();
-                    }
-
-                    cloud = { ref, setDoc: firestore.setDoc, deleteDoc: firestore.deleteDoc };
-                    setCloudStatus('Nuvem conectada.');
-                    void flushCloud();
+                    });
+                    cloud = { ...firebase, ref };
+                    const unsubscribe = firestore.onSnapshot(ref, { includeMetadataChanges: true }, (snapshot) => {
+                        if (snapshot.metadata.fromCache || snapshot.metadata.hasPendingWrites) return;
+                        if (!snapshot.exists() || !isAgendaState(snapshot.data().state)) {
+                            setCloudStatus('A agenda está indisponível. Tente novamente.', true);
+                            unsubscribe();
+                            cloud = null;
+                            return;
+                        }
+                        acceptRemote(snapshot.data());
+                        document.getElementById('btn-migrate-shared').classList.remove('hidden');
+                        if (pendingCloud) void flushCloud();
+                        else setCloudStatus('Agenda compartilhada atualizada.');
+                    }, (error) => {
+                        console.error('Erro ao abrir a agenda:', error);
+                        cloud = null;
+                        setCloudStatus('Não foi possível abrir a agenda. Confira a conexão e as regras do Firestore.', true);
+                    });
                 } catch (error) {
                     console.error('Erro na conexão com o Firebase:', error);
-                    setCloudStatus('Nuvem indisponível. Os dados continuam neste aparelho.', true);
+                    cloud = null;
+                    setCloudStatus('Nuvem indisponível. As alterações ficam neste aparelho.', true);
                 } finally {
                     connectingCloud = false;
                 }
             }
 
             async function flushCloud() {
-                if (!cloud || !pendingCloud || writingCloud) return;
-                if (!navigator.onLine) {
-                    setCloudStatus('Sem internet. As alterações ficam neste aparelho por enquanto.');
-                    return;
-                }
+                if (!cloud || !latestRemote || !pendingCloud || writingCloud || !navigator.onLine) return;
                 writingCloud = true;
-                setCloudStatus('Salvando na nuvem…');
+                setCloudStatus('Salvando na agenda compartilhada…');
                 try {
                     while (pendingCloud) {
                         const change = pendingCloud;
-                        if (change.action === 'delete') {
-                            await cloud.deleteDoc(cloud.ref);
+                        const sent = cloneState(appState);
+                        const { firestore, db, ref } = cloud;
+                        const result = await firestore.runTransaction(db, async (tx) => {
+                            const snapshot = await tx.get(ref);
+                            if (!snapshot.exists()) throw new Error('Agenda indisponível.');
+                            const remote = snapshot.data();
+                            if (change.generation !== null && change.generation !== remote.generation) {
+                                return { remote, discarded: true };
+                            }
+                            const next = {
+                                revision: remote.revision + 1,
+                                generation: change.reset ?? remote.generation,
+                                state: change.reset ? sent : mergeSharedState(change.base, sent, remote.state)
+                            };
+                            tx.set(ref, next);
+                            return { remote: next, discarded: false };
+                        });
+                        const confirmed = latestRemote.revision > result.remote.revision ? latestRemote : result.remote;
+                        latestRemote = confirmed;
+                        generation = confirmed.generation;
+                        const newer = pendingCloud !== change && !result.discarded &&
+                            confirmed.generation === result.remote.generation;
+                        if (newer) {
+                            const reset = pendingCloud.reset !== change.reset ? pendingCloud.reset : null;
+                            pendingCloud = { base: cloneState(confirmed.state), generation, reset };
+                            const next = reset ? appState : mergeSharedState(sent, appState, confirmed.state);
+                            refreshSharedState(next);
                         } else {
-                            const snapshot = JSON.parse(JSON.stringify(appState));
-                            await cloud.setDoc(cloud.ref, snapshot);
-                        }
-                        if (pendingCloud === change) {
                             pendingCloud = null;
-                            persistLocalState();
+                            refreshSharedState(cloneState(confirmed.state));
+                        }
+                        if (result.discarded || confirmed.generation !== result.remote.generation) {
+                            setCloudStatus('A agenda foi apagada em outro aparelho. Alterações anteriores à exclusão não foram enviadas.');
+                            return;
                         }
                     }
-                    setCloudStatus('Dados atualizados na nuvem.');
+                    setCloudStatus('Dados atualizados na agenda compartilhada.');
                 } catch (error) {
-                    console.error('Erro ao atualizar o Firestore:', error);
-                    setCloudStatus('Alterações salvas no aparelho. Falta atualizar a nuvem.', true);
+                    console.error('Erro ao atualizar a agenda:', error);
+                    setCloudStatus('Alterações salvas neste aparelho. Falta atualizar a agenda compartilhada.', true);
                 } finally {
                     writingCloud = false;
+                }
+            }
+
+            async function previousRecords(firebase) {
+                const local = readLocal(STORAGE_KEY) || readLocal(LEGACY_KEY);
+                if (isAgendaState(local)) {
+                    delete local.pendingCloud;
+                    return normalizeState(local);
+                }
+
+                const { firestore, db, user } = firebase;
+                const ref = firestore.doc(db, 'users', user.uid, 'agenda', 'state');
+                const previous = await firestore.getDocFromServer(ref);
+                return isAgendaState(previous.data()) ? normalizeState(previous.data()) : null;
+            }
+
+            async function migrateSharedRecords() {
+                if (!cloud || !latestRemote) return;
+                const button = document.getElementById('btn-migrate-shared');
+                button.disabled = true;
+                try {
+                    const previous = await previousRecords(cloud);
+                    let added = 0;
+                    previous?.profiles.forEach((source, index) => {
+                        const target = appState.profiles[index];
+                        for (const kind of ['doses', 'weights']) {
+                            const known = new Set(target[kind].map((record) => record.id));
+                            for (const record of source[kind]) {
+                                if (known.has(record.id)) continue;
+                                known.add(record.id);
+                                target[kind].push(record);
+                                added++;
+                            }
+                        }
+                    });
+                    if (added) {
+                        saveState();
+                        renderAll();
+                        showSnackbar(`${added} registro(s) trazido(s) deste aparelho.`);
+                    } else {
+                        showSnackbar('Nenhum registro novo neste aparelho.');
+                    }
+                } catch (error) {
+                    console.error('Erro ao trazer registros anteriores:', error);
+                    showSnackbar('Não foi possível trazer os registros anteriores.');
+                } finally {
+                    button.disabled = false;
                 }
             }
 
@@ -1198,7 +1339,7 @@
 
             function switchProfile(idx) {
                 appState.activeProfile = idx === 1 ? 1 : 0;
-                saveState();
+                persistLocalState();
                 applyActiveThemeColors();
                 updateProfileUI();
                 renderAll();
@@ -1642,7 +1783,7 @@
             }
 
             // =====================================================================
-            // RENDERIZAÇÃO: MODAL DE CONFIGURAÇÕES (ACF.18.11#4)
+            // RENDERIZAÇÃO: MODAL DE CONFIGURAÇÕES (ACF.18.11#5)
             // =====================================================================
             function buildReport(profile, start, end) {
                 const inPeriod = (record) => record.date >= start && record.date <= end;
@@ -2128,7 +2269,7 @@
                     if (!brand) return showSnackbar('Digite o nome da marca.');
 
                     getActiveProfile().doses.push({
-                        id: 'd_' + Date.now(),
+                        id: 'd_' + (crypto.randomUUID?.() ?? Date.now()),
                         date,
                         dose,
                         brand,
@@ -2156,7 +2297,7 @@
                     }
 
                     getActiveProfile().weights.push({
-                        id: 'w_' + Date.now(),
+                        id: 'w_' + (crypto.randomUUID?.() ?? Date.now()),
                         date,
                         weight: Math.round(weight * 10) / 10
                     });
@@ -2214,6 +2355,11 @@
                     });
                 });
 
+                document.getElementById('btn-migrate-shared').addEventListener('click', () => {
+                    openConfirm('Trazer registros anteriores?', 'As doses e pesagens importadas poderão ser vistas por quem abrir o site.', () => {
+                        void migrateSharedRecords();
+                    });
+                });
                 document.getElementById('btn-retry-cloud').addEventListener('click', () => {
                     if (cloud) void flushCloud();
                     else void connectCloud();
@@ -2221,7 +2367,6 @@
                 window.addEventListener('online', () => {
                     if (!cloud) void connectCloud();
                     else if (pendingCloud) void flushCloud();
-                    else setCloudStatus('Nuvem conectada.');
                 });
                 window.addEventListener('offline', () => {
                     setCloudStatus('Sem internet. As alterações ficam neste aparelho por enquanto.');
@@ -2229,7 +2374,8 @@
                 void connectCloud();
 
                 document.getElementById('btn-reset-all').addEventListener('click', () => {
-                    openConfirm('Apagar tudo?', 'Todos os registros dos 2 perfis serão apagados deste aparelho e da nuvem.', () => {
+                    if (!latestRemote) return showSnackbar('Aguarde a agenda conectar para apagar os registros.');
+                    openConfirm('Apagar tudo?', 'Todos os registros dos dois perfis serão apagados em todos os aparelhos.', () => {
                         appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
                         saveState('delete');
                         applyFontScale('normal');
@@ -2238,7 +2384,7 @@
                         renderSettingsModal();
                         renderAll();
                         closeModal('modal-settings');
-                        showSnackbar('Dados apagados neste aparelho.');
+                        showSnackbar('Exclusão registrada para sincronização.');
                     });
                 });
             });
